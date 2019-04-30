@@ -21,11 +21,27 @@
 
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
             <?php
-                if($_GET['login']=='error') {
-                    echo "로그인이 실패하였습니다. 비밀번호를 확인해 주세요.";
+                if(isset($_SESSION['u_id'])) {
+                    if($_SESSION['u_id'] == 'admin') {
+            ?>
+            <div class="add_user">
+                <form class="add_user_form" action="./inc/register.php" method="POST">
+                    아이디 : <input type="text" name="user_id" plasceholder="ID"><br>
+                    비밀번호 : <input type="password" name="user_pw" plasceholder="Password"><br>
+                    <button type="submit" name="submit">등록</button>
+                </form>
+            </div>
+            <?php
+                    } else {
+                        echo "admin이 아닙니다.";
+                    }
+                } else {
+                    echo "admin 로그인이 필요합니다.";
                 }
             ?>
+
         </div>
         <!-- !END PAGE CONTENT! -->
 
