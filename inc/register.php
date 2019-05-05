@@ -31,11 +31,4 @@
         exit();
     }
 
-
-    // $stmt=$db->prepare(“INSERT INTO test (name) VALUES (:col2)”); 
-    // // 첫번째열은 auto_increment 이므로 삽입할 필요가 없다.
-    // $stmt->bindParam(‘:col2′,$data2);
-    // $data2=”Kelvin”;
-    // $stmt->execute();
-
 ?>

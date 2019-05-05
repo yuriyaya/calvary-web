@@ -22,7 +22,7 @@
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
             <?php
-                if($_GET['login']=='error') {
+                if(isset($_GET['login']) && ($_GET['login']=='error')) {
                     echo "로그인이 실패하였습니다. 비밀번호를 확인해 주세요.";
                 }
             ?>

@@ -28,8 +28,9 @@
                     if($_SESSION['u_id'] == 'admin') {
                         include_once "./inc/admin_menu.php";
                         include_once "./inc/func_global.php";
-                        include_once "./inc/add_member.php";
+                        include_once "./inc/update_member_state.php";
             ?>
+
             <!-- !ALERT! -->
             <?php
                 if(!empty($status_msg_code)) {
@@ -38,8 +39,8 @@
                 }
             ?>
             <?php if(!empty($additional_info)){echo $additional_info;} ?>
-            <div class="add_member">
-                <form class="add_member_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <div class="update_member_state">
+                <form class="update_member_state_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
                             <td>일련번호 : </td><td><input type="text" name="member_id" value="<?php if(!empty($member_id)){echo $member_id;} ?>"></td>
@@ -66,31 +67,22 @@
                             <td></td><td><button type="submit" name="member_search" class="w3-button w3-green">조회</button></td>
                         </tr>
                         <tr>
-                            <td>등록일 : </td><td><input type="date" name="member_join_date" value="<?php if(empty($member_join_date)){echo date("Y-m-d");} else {echo $member_join_date;} ?>"></td>
+                            <td>변경일 : </td><td><input type="date" name="state_update_date" value="<?php if(empty($state_update_date)){echo date("Y-m-d");} else {echo $state_update_date;} ?>"></td>
                         </tr>
                         <tr>
-                            <td>직분 : </td>
+                            <td>상태 : </td>
                             <td>
-                                <select class="w3-select w3-border" id="staff" name="member_staff">
-                                    <option value="0" <?php if(empty($member_staff)){echo "selected";} ?> disabled>직분을 선택하세요</option>  
-                                    <option value="1" <?php if(!empty($member_staff) && ($member_staff==1)){echo "selected";} ?>>성도</option>
-                                    <option value="2" <?php if(!empty($member_staff) && ($member_staff==2)){echo "selected";} ?>>집사</option>
-                                    <option value="3" <?php if(!empty($member_staff) && ($member_staff==3)){echo "selected";} ?>>안수집사</option>
-                                    <option value="4" <?php if(!empty($member_staff) && ($member_staff==4)){echo "selected";} ?>>권사</option>
-                                    <option value="5" <?php if(!empty($member_staff) && ($member_staff==5)){echo "selected";} ?>>장로</option>
-                                    <option value="6" <?php if(!empty($member_staff) && ($member_staff==6)){echo "selected";} ?>>전도사</option>
-                                    <option value="7" <?php if(!empty($member_staff) && ($member_staff==7)){echo "selected";} ?>>목사</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>파트장 : </td>
-                            <td>
-                                <select class="w3-select w3-border" id="calvary_staff" name="calvary_staff">
-                                    <option value="0" <?php if(empty($member_staff)){echo "selected";} ?> disabled>파트장 여부 선택</option>  
-                                    <option value="1" <?php if(!empty($member_staff) && ($member_staff==1)){echo "selected";} ?>>대원</option>
-                                    <option value="2" <?php if(!empty($member_staff) && ($member_staff==2)){echo "selected";} ?>>파트장</option>
-                                    <option value="3" <?php if(!empty($member_staff) && ($member_staff==3)){echo "selected";} ?>>부파트장</option>
+                                <select class="w3-select w3-border" id="state" name="member_state">
+                                    <option value="0" <?php if(empty($member_part)){echo "selected";} ?> disabled>상태를 선택하세요</option>
+                                    <option value="1" <?php if(!empty($member_part) && ($member_part==1)){echo "selected";} ?>>일반</option>
+                                    <option value="2" <?php if(!empty($member_part) && ($member_part==2)){echo "selected";} ?>>솔리스트</option>
+                                    <option value="3" <?php if(!empty($member_part) && ($member_part==3)){echo "selected";} ?>>신입</option>
+                                    <option value="4" <?php if(!empty($member_part) && ($member_part==4)){echo "selected";} ?>>임시</option>
+                                    <option value="5" <?php if(!empty($member_part) && ($member_part==5)){echo "selected";} ?>>특별</option>
+                                    <option value="6" <?php if(!empty($member_part) && ($member_part==6)){echo "selected";} ?>>휴식</option>
+                                    <option value="7" <?php if(!empty($member_part) && ($member_part==7)){echo "selected";} ?>>제적</option>
+                                    <option value="8" <?php if(!empty($member_part) && ($member_part==8)){echo "selected";} ?>>은퇴</option>
+                                    <option value="9" <?php if(!empty($member_part) && ($member_part==9)){echo "selected";} ?>>명예</option>
                                 </select>
                             </td>
                         </tr>
