@@ -87,10 +87,10 @@
                             <td>파트장 : </td>
                             <td>
                                 <select class="w3-select w3-border" id="calvary_staff" name="calvary_staff">
-                                    <option value="0" <?php if(empty($member_staff)){echo "selected";} ?> disabled>파트장 여부 선택</option>  
-                                    <option value="1" <?php if(!empty($member_staff) && ($member_staff==1)){echo "selected";} ?>>대원</option>
-                                    <option value="2" <?php if(!empty($member_staff) && ($member_staff==2)){echo "selected";} ?>>파트장</option>
-                                    <option value="3" <?php if(!empty($member_staff) && ($member_staff==3)){echo "selected";} ?>>부파트장</option>
+                                    <option value="0" <?php if(empty($calvary_staff)){echo "selected";} ?> disabled>파트장 여부 선택</option>  
+                                    <option value="1" <?php if(!empty($calvary_staff) && ($calvary_staff==1)){echo "selected";} ?>>대원</option>
+                                    <option value="2" <?php if(!empty($calvary_staff) && ($calvary_staff==2)){echo "selected";} ?>>파트장</option>
+                                    <option value="3" <?php if(!empty($calvary_staff) && ($calvary_staff==3)){echo "selected";} ?>>부파트장</option>
                                 </select>
                             </td>
                         </tr>

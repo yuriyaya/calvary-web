@@ -70,32 +70,35 @@
                             <td>변경일 : </td><td><input type="date" name="state_update_date" value="<?php if(empty($state_update_date)){echo date("Y-m-d");} else {echo $state_update_date;} ?>"></td>
                         </tr>
                         <tr>
-                            <td>상태 : </td>
+                            <td>현재상태 : </td><td><?php if(!empty($member_state_now)){echo getMemberStateString($member_state_now);} ?><input type="hidden" name="member_state_now" value="<?php if(!empty($member_state_now)){echo $member_state_now;} ?>"></td>
+                        </tr>
+                        <tr>
+                            <td>변경상태 : </td>
                             <td>
                                 <select class="w3-select w3-border" id="state" name="member_state">
-                                    <option value="0" <?php if(empty($member_part)){echo "selected";} ?> disabled>상태를 선택하세요</option>
-                                    <option value="1" <?php if(!empty($member_part) && ($member_part==1)){echo "selected";} ?>>일반</option>
-                                    <option value="2" <?php if(!empty($member_part) && ($member_part==2)){echo "selected";} ?>>솔리스트</option>
-                                    <option value="3" <?php if(!empty($member_part) && ($member_part==3)){echo "selected";} ?>>신입</option>
-                                    <option value="4" <?php if(!empty($member_part) && ($member_part==4)){echo "selected";} ?>>임시</option>
-                                    <option value="5" <?php if(!empty($member_part) && ($member_part==5)){echo "selected";} ?>>특별</option>
-                                    <option value="6" <?php if(!empty($member_part) && ($member_part==6)){echo "selected";} ?>>휴식</option>
-                                    <option value="7" <?php if(!empty($member_part) && ($member_part==7)){echo "selected";} ?>>제적</option>
-                                    <option value="8" <?php if(!empty($member_part) && ($member_part==8)){echo "selected";} ?>>은퇴</option>
-                                    <option value="9" <?php if(!empty($member_part) && ($member_part==9)){echo "selected";} ?>>명예</option>
+                                    <option value="0" selected disabled>변경할 상태를 선택하세요</option>
+                                    <option value="1">정대원</option>
+                                    <option value="2">솔리스트</option>
+                                    <option value="3">신입</option>
+                                    <option value="4">임시</option>
+                                    <option value="5">특별</option>
+                                    <option value="6">휴식</option>
+                                    <option value="7">제적</option>
+                                    <option value="8">은퇴</option>
+                                    <option value="9">명예</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>
-                                <button type="submit" name="member_register" class="w3-button w3-green">등록</button>
-                                <button type="submit" name="member_update" class="w3-button w3-green">수정</button>
+                                <button type="submit" name="member_state_update" class="w3-button w3-green">상태변경</button>
                             </td>
                         </tr>
                     </table>
                 </form>
             </div>
+            <?php if(!empty($state_change_history)){echo $state_change_history;} ?>
             <?php
                     } else {
                         echo "admin이 아닙니다.";

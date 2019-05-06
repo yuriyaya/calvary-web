@@ -86,4 +86,43 @@
 
         return $ret_str;
     }
+
+    function getMemberStateString($state_num){
+        $ret_str = '';
+
+        switch($state_num){
+            case 1:
+                $ret_str = "정대원";
+                break;
+            case 2:
+                $ret_str = "솔리스트";
+                break;
+            case 3:
+                $ret_str = "신입";
+                break;
+            case 4:
+                $ret_str = "임시";
+                break;
+            case 5:
+                $ret_str = "특별";
+                break;
+            case 6:
+                $ret_str = "휴식";
+                break;
+            case 7:
+                $ret_str = "제적";
+                break;
+            case 8:
+                $ret_str = "은퇴";
+                break;
+            case 9:
+                $ret_str = "명예";
+                break;
+            default:
+                $ret_str = "";
+                break;
+        }
+
+        return $ret_str;
+    }
 ?>

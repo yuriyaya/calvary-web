@@ -2,72 +2,49 @@
 
     $status_msg_code = "";
     $member_sn = 0;
+    $member_state_now = 0;
 
     if(isset($_POST['member_id'])){$member_id = $_POST['member_id'];}
     if(isset($_POST['member_name'])){$member_name = $_POST['member_name'];}
     if(isset($_POST['member_part'])){$member_part = $_POST['member_part'];}
-    if(isset($_POST['member_join_date'])){$member_join_date = $_POST['member_join_date'];}
-    if(isset($_POST['member_staff'])){$member_staff = $_POST['member_staff'];}
-    if(isset($_POST['calvary_staff'])){$calvary_staff = $_POST['calvary_staff'];}
+    if(isset($_POST['state_update_date'])){$state_update_date = $_POST['state_update_date'];}
+    if(isset($_POST['member_state_now'])){$member_state_now = $_POST['member_state_now'];}
+    if(isset($_POST['member_state'])){$member_state = $_POST['member_state'];}
 
-    if(isset($_POST['member_register'])) {
+    if(isset($_POST['member_state_update'])) {
 
-        if(empty($member_name) || empty($member_part) || empty($member_join_date) || empty($member_staff) || empty($calvary_staff)) {
+        if(empty($member_id) || empty($member_name) || empty($member_part) || empty($state_update_date) || empty($member_state)) {
             //error
-            $status_msg_code = "9010";
+            $status_msg_code = "9030";
         } else {
             try {
                 include_once 'dbconn.php';
 
+                // echo $member_id.'<br>';
                 // echo $member_name.'<br>';
                 // echo $member_part.'<br>';
-                // echo $member_join_date.'<br>';
-                // echo $member_staff.'<br>';
+                // echo $state_update_date.'<br>';
+                // echo $member_state_now.'<br>';
+                // echo $member_state.'<br>';
 
-                //check whether same name is already registered in same part
-                $query = "SELECT * FROM member_info WHERE part=".$member_part." AND name='".$member_name."'";
-                $stmt = $conn->prepare($query);
-                $stmt->execute();
-                $num_of_rows = $stmt->rowCount();
-                // echo "num_of_rows: ".$num_of_rows."<br>";
-                if($num_of_rows>0) {
-                    $status_msg_code = "9012";
-                }
+                //check update state is not same with current state
+                if($member_state_now == $member_state){
+                    //not changed, do nothing
+                    $status_msg_code = "9032";
+                } else {
+                    //add record to database
+                    $query = "INSERT INTO member_state (id, state_update_date, state) VALUES (:in1, :in2, :in3)";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bindParam(':in1', $in1);
+                    $stmt->bindParam(':in2', $in2);
+                    $stmt->bindParam(':in3', $in3);
 
-                $query = "SELECT MAX(id) FROM member_info WHERE part=".$member_part;
-                $stmt = $conn->prepare($query);
-                $stmt->execute();
+                    $in1 = $member_id;
+                    $in2 = $state_update_date;
+                    $in3 = $member_state;
+                    $stmt->execute();
 
-                $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                while($row = $stmt->fetch()) {
-
-                    if(is_null($row['MAX(id)'])) {
-                        $member_id = ($member_part * 10000) + 1;
-                    } else {
-                        $member_id = $row['MAX(id)'] + 1;
-                    }
-                    // echo $member_id;
-                }
-
-                $query = "INSERT INTO member_info (id, name, part, join_date, church_staff, calvary_staff) VALUES (:in1, :in2, :in3, :in4, :in5, :in6)";
-                $stmt = $conn->prepare($query);
-                $stmt->bindParam(':in1', $in1);
-                $stmt->bindParam(':in2', $in2);
-                $stmt->bindParam(':in3', $in3);
-                $stmt->bindParam(':in4', $in4);
-                $stmt->bindParam(':in5', $in5);
-                $stmt->bindParam(':in6', $in6);
-
-                $in1 = $member_id;
-                $in2 = $member_name;
-                $in3 = $member_part;
-                $in4 = $member_join_date;
-                $in5 = $member_staff;
-                $in6 = $calvary_staff;
-                $stmt->execute();
-
-                if($status_msg_code != "9012") {
-                    $status_msg_code = "9011";
+                    $status_msg_code = "9031";
                 }
             }
             catch(PDOException $e)
@@ -75,7 +52,7 @@
                 echo $query . "<br>" . $e->getMessage();
             }
         }
-        unset($_POST['member_register']);
+        unset($_POST['member_state_update']);
 
     } elseif (isset($_POST['member_search'])) {
 
@@ -85,6 +62,7 @@
         } else {
             try {
                 include_once 'dbconn.php';
+
                 //search name
                 if(!empty($member_id)) {
                     $query = "SELECT * FROM member_info WHERE part=".$member_part." AND name='".$member_name."' AND id=".$member_id;
@@ -110,6 +88,7 @@
                         $additional_info=$additional_info.'</tr>';
                     }
                     $additional_info=$additional_info.'</table>';
+                    
                 } else if($num_of_rows == 1) {
                     //1 person exist, update form
                     $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -119,6 +98,30 @@
                         $member_join_date = $row['join_date'];
                         $member_staff = $row['church_staff'];
                         $calvary_staff = $row['calvary_staff'];
+                    }
+
+                    //get current member state from member_state database
+                    $query = "SELECT * FROM member_state WHERE id=".$member_id." ORDER BY sn DESC;";
+
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $num_of_rows = $stmt->rowCount();
+                    $member_state_now = 0;
+                    if($num_of_rows >= 1) {
+                        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                        $state_change_history='<table class="w3-table-all w3-hoverable"><tr><th>변경일</th><th>상태</th>';
+                        while($row = $stmt->fetch()) {
+                            if(empty($member_state_now)) {
+                                $member_state_now = $row['state'];
+                            }
+                            $state_change_history=$state_change_history.'<tr>';
+                            $state_change_history=$state_change_history.'<td>'.$row['state_update_date'].'</td>';
+                            $state_change_history=$state_change_history.'<td>'.getMemberStateString($row['state']).'</td>';
+                            $state_change_history=$state_change_history.'</tr>';
+                        }
+                        $state_change_history=$state_change_history.'</table>';
+                    } else {
+                        $member_state_now = 0;
                     }
 
                     $status_msg_code = "9016";
@@ -137,58 +140,6 @@
             }
         }
         unset($_POST['member_search']);
-    } elseif (isset($_POST['member_update'])) {
-        if(empty($member_id) || empty($member_name) || empty($member_part) || empty($member_join_date) || empty($member_staff) || empty($calvary_staff)) {
-            //error
-            $status_msg_code = "9017";
-        } else {
-            try {
-                include_once 'dbconn.php';
-
-                //update member information, get sn
-                if(empty($member_sn)) {
-                    //get sn to update member info
-                    $query = "SELECT * FROM member_info WHERE part=".$member_part." AND name='".$member_name."' AND id=".$member_id;
-                    $stmt = $conn->prepare($query);
-                    $stmt->execute();
-                    $num_of_rows = $stmt->rowCount();
-                    // echo "num_of_rows: ".$num_of_rows."<br>";
-                    if($num_of_rows == 1) {
-                        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                        while($row = $stmt->fetch()) {
-                            $member_sn = $row['sn'];
-                            // echo $member_sn;
-                        }
-                    } else if ($num_of_rows > 1) {
-                        $status_msg_code = "9018";
-                    } else {
-                        $status_msg_code = "9019";
-                    }
-
-                } else {
-                    //already got member info, try to update
-                }
-
-                if(empty($status_msg_code)){
-                    $query = "UPDATE member_info SET id = :member_id, name = :member_name, part = :member_part, join_date = :member_join_date, church_staff = :member_staff WHERE sn = :member_sn";
-                    $stmt = $conn->prepare($query);
-                    $stmt->bindParam(':member_id', $member_id, PDO::PARAM_INT);
-                    $stmt->bindParam(':member_name', $member_name, PDO::PARAM_STR);
-                    $stmt->bindParam(':member_part', $member_part, PDO::PARAM_INT);
-                    $stmt->bindParam(':member_join_date', $member_join_date, PDO::PARAM_STR);
-                    $stmt->bindParam(':member_staff', $member_staff, PDO::PARAM_INT);
-                    $stmt->bindParam(':member_sn', $member_sn, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $status_msg_code = "9020"; //success
-                }
-            }
-            catch(PDOException $e)
-            {
-                echo $query . "<br>" . $e->getMessage();
-            }
-        }
-        unset($_POST['member_update']);
     } else {}
 
 ?>
