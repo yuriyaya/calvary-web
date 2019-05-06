@@ -68,5 +68,40 @@
         "level" : "red",
         "title":"대원 상태 변경 입력 에러",
         "description":"현재 상태와 변경 요청 상태가 같아서 변경이 불가능 합니다. 입력된 정보를 확인해 주세요."
+    },
+    "9040":{
+        "level" : "red",
+        "title":"출결 날짜 입력 에러",
+        "description":"출결 날짜가 입력되지 않았습니다. 입력해 주세요."
+    },
+    "9041":{
+        "level" : "red",
+        "title":"출결 날짜 입력 에러",
+        "description":"이미 입력된 날짜 입니다. 확인해 주세요."
+    },
+    "9042":{
+        "level" : "green",
+        "title":"출결 날짜 입력 성공",
+        "description":""
+    },
+    "9043":{
+        "level" : "red",
+        "title":"출결 날짜 삭제 실패",
+        "description":"입력된 날짜가 데이터베이스에 없습니다."
+    },
+    "9044":{
+        "level" : "green",
+        "title":"출결 날짜 삭제 성공",
+        "description":""
+    },
+    "9045":{
+        "level" : "red",
+        "title":"출결 날짜 조회 입력 에러",
+        "description":"출결 날짜 조회 시작일/종류일이 입력되지 않았습니다. 모두 입력해 주세요."
+    },
+    "9046":{
+        "level" : "green",
+        "title":"출결 날짜 조회 성공",
+        "description":""
     }
 }
