@@ -1,0 +1,10 @@
+.add_user {
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.add_member, .update_member_state {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

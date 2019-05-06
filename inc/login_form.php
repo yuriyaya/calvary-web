@@ -8,7 +8,7 @@
             <div class="w3-section">
                 <label><b>아이디</b></label>
                 <select id="login_id" name="login_id" onchange="changeSelectedId()">
-                    <option value="" selected disabled>파트를 선택</option>  
+                    <option value="" selected disabled>아이디를 선택하세요</option>  
                     <option value="sopa">소프라노A</option>
                     <option value="sopb">소프라노B</option>
                     <option value="sopbp">소프라노B+</option>
@@ -17,7 +17,7 @@
                     <option value="tenner">테너</option>
                     <option value="bass">베이스</option>
                     <option value="operator">임원단</option>
-                    <option value="admin">Admin</option>
+                    <option value="admin">관리자</option>
                 </select>
                 <input class="w3-input w3-border w3-margin-bottom" type="text" id="username" placeholder="아이디를 입력하세요" name="user_id" required>
                 <label><b>비밀번호</b></label>
