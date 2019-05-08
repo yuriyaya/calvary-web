@@ -35,25 +35,31 @@
                 <h3><?php echo returnPartName($part_number); ?></h3>
                 <p><?php echo displayTitleDescription($id); ?></p>
             </div>
-            <form class="att_log_part_search" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <form class="att_log_part_search" action="./attendence_log_part_search.php" method="POST">
                 <table style="border:0px">
                     <tr>
                         <td>출석일 :</td>
                         <td><?php echo displayAttSearchOpt($id); ?></td>
-                    </tr>
-                    <tr>
-                        <td></td>
                         <td><button type="submit" name="search_submit" class="w3-button w3-green" id="submit_search_button">조회</button></td>
-                    <tr>
+                    </tr>
                 </table>
             </form>
-            <form class="att_log_part" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
             <?php
-                    echo displayAttendenceForm($part_number, $id);
+                    $date = checkAttLogDay($id);
+                    if(!is_null($date)) {
+                        //TODO get id-state array
+            ?>
+            <form class="att_log_part" action="#" method="POST">
+            <?php
+                        //TODO for each for sentence, create one row of attendence log
+                        echo displayAttendenceForm($part_number, $id, $date);
+            ?>
+                <button type="submit" name="submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
+            </form>
+            <?php
+                    }
                 }
             ?>
-            <button type="submit" name="submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
-            </form>
         </div>
         <!-- !END PAGE CONTENT! -->
 
