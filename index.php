@@ -22,44 +22,20 @@
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
             <?php
+                include_once "./inc/func_global.php";
                 if(isset($_GET['login']) && ($_GET['login']=='error')) {
-                    echo "로그인이 실패하였습니다. 비밀번호를 확인해 주세요.";
+                    $status_msg_code = '5000';
+                }
+                if(!empty($status_msg_code)) {
+                    echo displayAlert($status_msg_code);
+                    $status_msg_code = '';
                 }
             ?>
         </div>
+        
         <!-- !END PAGE CONTENT! -->
 
-        <script>
-            // Get the Sidebar
-            var mySidebar = document.getElementById("mySidebar");
-            // Get the DIV with overlay effect
-            var overlayBg = document.getElementById("myOverlay");
-            // Toggle between showing and hiding the sidebar, and add overlay effect
-            function w3_open() {
-            if (mySidebar.style.display === 'block') {
-                mySidebar.style.display = 'none';
-                overlayBg.style.display = "none";
-            } else {
-                mySidebar.style.display = 'block';
-                overlayBg.style.display = "block";
-            }
-            }
-            // Close the sidebar with the close button
-            function w3_close() {
-                mySidebar.style.display = "none";
-                overlayBg.style.display = "none";
-            }
-
-            function changeSelectedId(){
-                var selectedLoginId = document.getElementById("login_id");
-                var selectValue = selectedLoginId.options[selectedLoginId.selectedIndex].value;
-                var selectText = selectedLoginId.options[selectedLoginId.selectedIndex].text;
-                // alert(selectValue);
-                // alert(selectText);
-                document.getElementById("username").value = selectValue;
-            }
-
-        </script>
+        <script type="text/javascript" src="./js/menu.js"></script>
 
     </body>
 </html>

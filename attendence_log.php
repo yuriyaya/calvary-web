@@ -1,3 +1,28 @@
+<?php
+    include_once "./inc/func_global.php";
+    if(!isset($_SESSION['u_id'])) {
+        session_start();
+    }
+    $id=null;
+    if(isset($_SESSION['u_id'])){
+        $id=$_SESSION['u_id'];
+        
+    }
+
+    if(isset($_GET['login']) && ($_GET['login']=='error')) {
+        $status_msg_code = '5000';
+    } else {
+        //redirect to attendence log page for each part
+        switch($id) {
+            case 'sopa':
+                header("Location: ./attendence_log_part.php?part_num=1&id=0");
+                break;
+            default:
+                $status_msg_code = '5002';
+                break;
+        }
+    }
+?>
 <!DOCTYPE html>
 <html>
     <title>영락교회 갈보리 찬양대</title>
@@ -21,25 +46,12 @@
 
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
             <?php
-                include_once "./inc/func_global.php";
-                if(isset($_SESSION['u_id'])) {
-                    if($_SESSION['u_id'] == 'admin') {
-                        include_once "./inc/admin_menu.php";
-                    } else {
-                        $status_msg_code = '5001';
-                    }
-                } else {
-                    $status_msg_code = '5001';
-                }
-                //ALERT!
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
                 }
             ?>
-
         </div>
         <!-- !END PAGE CONTENT! -->
 

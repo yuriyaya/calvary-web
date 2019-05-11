@@ -3,13 +3,13 @@
     padding-top: 20px;
 }
 
-.add_member, .update_member_state, .add_attendence_date_form {
+.add_member, .update_member_state, .add_attendence_date_form, .add_attendence_log_form {
     padding-left: 20px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.search_attendence_date_form {
+.search_attendence_date_form{
     padding-left: 20px;
     padding-bottom: 20px;
 }
