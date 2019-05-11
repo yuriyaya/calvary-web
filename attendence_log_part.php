@@ -51,7 +51,7 @@
                 </table>
             </form>
             <?php
-                    $date = checkAttLogDay($id);
+                    $date = checkAttLogDayById($id);
                     if(!empty($date)) {
                         //TODO get id-state array
             ?>

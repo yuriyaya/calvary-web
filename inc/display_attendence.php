@@ -3,16 +3,16 @@
     function displayTitleDescription($id) {
         $ret_str = '';
 
-        if(empty(checkAttLogDay($id))) {
+        if(empty(checkAttLogDayById($id))) {
             $ret_str = date('Y-m-d').' 오늘은 출석 입력일이 아닙니다.';
         } else {
-            $ret_str = checkAttLogDay($id).' 출석 입력 중';
+            $ret_str = checkAttLogDayById($id).' 출석 입력 중';
         }
 
         return $ret_str;
     }
 
-    function checkAttLogDay($id) {
+    function checkAttLogDayById($id) {
         $ret = '';
 
         include 'dbconn.php';
@@ -36,6 +36,25 @@
             while($row = $stmt->fetch()) {
                 $ret = $row['att_date'];
             }
+        }
+
+        return $ret;
+
+    }
+
+    function checkAttLogDayByDate($date) {
+        $ret = '';
+
+        include 'dbconn.php';
+
+        $query = "SELECT * FROM attendence_date WHERE att_date='".$date."'";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $num_of_rows = $stmt->rowCount();
+        if($num_of_rows>0) {
+            $ret = $date;
+        } else {
+            $ret = '';
         }
 
         return $ret;
