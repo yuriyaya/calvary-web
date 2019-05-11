@@ -55,12 +55,14 @@
                     if(!empty($date)) {
                         //TODO get id-state array
             ?>
-            <form class="att_log_part" action="#" method="POST">
+            <form class="att_log_part" action="./inc/attendence_log_part_update.php" method="POST">
                 <?php
                     //TODO for each for sentence, create one row of attendence log
                         echo displayAttendenceForm($part_number, $date);
                 ?>
-                <button type="submit" name="submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
+                <input type="hidden" name="att_part" value="<?php echo $part_number ?>">
+                <input type="hidden" name="att_date" value="<?php echo $date ?>">
+                <button type="submit" name="update_submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
             </form>
             <?php
                     }

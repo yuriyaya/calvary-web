@@ -95,54 +95,53 @@
 
         //display attendence check form
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:500px;">'.dispalyAttLogHeader($date);
-        // $att_check_form=$att_check_form.'<tr><td>이름1<input type="hidden" name="id_10001" value="10001"></td><td></td>'.$check_form.'<td style="background-color:Tomato">100%</td><td>100%</td><td>100%</td>'.$status_option;
-        // $att_check_form=$att_check_form.'<tr><td>이름2<input type="hidden" name="id_10002" value="10002"></td><td></td>'.$check_form.'<td>100%</td><td>100%</td><td>100%</td>'.$status_option;
+        
         foreach($att_list_staff as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2], '파트장');
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2], '파트장');
         }
         foreach($att_list_normal as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2]);
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2]);
         }
         foreach($att_list_newbie as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2]);
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2]);
         }
         foreach($att_list_temp as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2]);
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2]);
         }
         foreach($att_list_special as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2]);
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2]);
         }
         foreach($att_list_pause as $att_list) {
             // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-            $att_check_form=$att_check_form.getAttOneRow($att_list[0], $att_list[1], $att_list[2]);
+            $att_check_form=$att_check_form.getAttOneRow($part, $date, $att_list[0], $att_list[1], $att_list[2]);
         }
         $att_check_form=$att_check_form.'</table>';
 
         return $att_check_form;
     }
 
-    function getAttOneRow($mem_id, $mem_name, $mem_state, $staff_state=null) {
+    function getAttOneRow($part_num, $att_date, $mem_id, $mem_name, $mem_state, $staff_state=null) {
         $ret = '';
 
-        $check_form = '<input class="w3-check" type="checkbox" name="att_val[]" value="o">';
-        $status_option = '<select class="w3-select w3-border" name="member_state_up[]">
-            <option value="0" selected disabled>선택</option>
+        $status_option = '<select class="w3-select w3-border" name="mem_state_up[]">
+            <option value="0" selected>선택</option>
             <option value="1">정대원</option>
             <option value="6">휴식</option>
             <option value="7">제적</option>
         </select>';
+        $check_form = getAttLogCheckbox($part_num, $att_date, $mem_id);
 
         $ret = $ret.'<tr>';
         $ret =  $ret.'<td>';
-        $ret =   $ret.'<input type="hidden" name="id[]" value="'.$mem_id.'">'.$mem_name.'<input type="hidden" name="name[]" value="'.$mem_name.'">';
+        $ret =   $ret.'<input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'<input type="hidden" name="mem_name[]" value="'.$mem_name.'">';
         $ret =  $ret.'</td>';
         $ret =  $ret.'<td>';
-        $ret =   $ret.getAttendenceFormMemberState($mem_state, $staff_state);
+        $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
         $ret =  $ret.'</td>';
         $ret =  $ret.'<td>'.$check_form.'</td>';
         $ret =  $ret.'<td>-%</td>';
@@ -152,6 +151,64 @@
         $ret = $ret.'</tr>';
 
         return $ret;
+    }
+
+    function getAttLogCheckbox($part, $date, $id) {
+        $ret = '';
+        $att_result = '';
+
+        include 'dbconn.php';
+        $query = "SELECT * FROM ".getAttDBName($part)." WHERE date='".$date."' AND id=".$id.";";
+
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $num_of_rows = $stmt->rowCount();
+
+        if($num_of_rows > 0) {
+            //already attendence log exist, update data
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $stmt->fetch()) {
+                if($row['attend_value']==10) {
+                    $att_result = ' checked';
+                }
+            }
+        }
+
+        $ret = '<input type="hidden" name="mem_att_val[]" value="off"><input class="w3-check" type="checkbox" name="mem_att_val[]"'.$att_result.'>';
+
+        return $ret;
+    }
+
+    function getAttDBName($part_num) {
+        $ret_db = '';
+
+        switch($part_num){
+            case 1:
+                $ret_db = "attendence_sopa";
+                break;
+            case 2:
+                $ret_db = "attendence_sopb";
+                break;
+            case 3:
+                $ret_db = "attendence_sopbp";
+                break;
+            case 4:
+                $ret_db = "attendence_altoa";
+                break;
+            case 5:
+                $ret_db = "attendence_altob";
+                break;
+            case 6:
+                $ret_db = "attendence_tenor";
+                break;
+            case 7:
+                $ret_db = "attendence_bass";
+                break;
+            default:
+                break;
+        }
+
+        return $ret_db;
     }
 
     function getMemberSNStateFromDB($part, $date) {
