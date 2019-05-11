@@ -58,7 +58,7 @@
             <form class="att_log_part" action="#" method="POST">
                 <?php
                     //TODO for each for sentence, create one row of attendence log
-                        echo displayAttendenceForm($part_number, $id, $date);
+                        echo displayAttendenceForm($part_number, $date);
                 ?>
                 <button type="submit" name="submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
             </form>
