@@ -23,14 +23,20 @@
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
             <?php
+                include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
                     if($_SESSION['u_id'] == 'admin') {
                         include_once "./inc/admin_menu.php";
                     } else {
-                        echo "admin이 아닙니다.";
+                        $status_msg_code = '5001';
                     }
                 } else {
-                    echo "admin 로그인이 필요합니다.";
+                    $status_msg_code = '5001';
+                }
+                //ALERT!
+                if(!empty($status_msg_code)) {
+                    echo displayAlert($status_msg_code);
+                    $status_msg_code = '';
                 }
             ?>
 

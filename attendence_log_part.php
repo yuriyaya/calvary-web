@@ -24,7 +24,7 @@
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
             <?php
                 if(isset($_GET['login']) && ($_GET['login']=='error')) {
-                    echo "로그인이 실패하였습니다. 비밀번호를 확인해 주세요.";
+                    $status_msg_code = '5000';
                 } else {
                     include_once "./inc/display_attendence.php";
                     include_once "./inc/func_global.php";
@@ -35,6 +35,12 @@
                 <h3><?php echo returnPartName($part_number); ?></h3>
                 <p><?php echo displayTitleDescription($id); ?></p>
             </div>
+            <?php
+                    if(!empty($status_msg_code)) {
+                        echo displayAlert($status_msg_code);
+                        $status_msg_code = '';
+                    }
+            ?>
             <form class="att_log_part_search" action="./attendence_log_part_search.php" method="POST">
                 <table style="border:0px">
                     <tr>
@@ -46,14 +52,14 @@
             </form>
             <?php
                     $date = checkAttLogDay($id);
-                    if(!is_null($date)) {
+                    if(!empty($date)) {
                         //TODO get id-state array
             ?>
             <form class="att_log_part" action="#" method="POST">
-            <?php
-                        //TODO for each for sentence, create one row of attendence log
+                <?php
+                    //TODO for each for sentence, create one row of attendence log
                         echo displayAttendenceForm($part_number, $id, $date);
-            ?>
+                ?>
                 <button type="submit" name="submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
             </form>
             <?php

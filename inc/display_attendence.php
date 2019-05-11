@@ -3,7 +3,7 @@
     function displayTitleDescription($id) {
         $ret_str = '';
 
-        if(is_null(checkAttLogDay($id))) {
+        if(empty(checkAttLogDay($id))) {
             $ret_str = date('Y-m-d').' 오늘은 출석 입력일이 아닙니다.';
         } else {
             $ret_str = checkAttLogDay($id).' 출석 입력 중';
@@ -45,20 +45,19 @@
     function displayAttSearchOpt($id) {
         $ret_str = '';
 
+        $today = date('Y-m-d');
         $ret_str = '<select class="w3-select w3-border" id="state" name="att_date_select">';
-        if($id == 0) {
-            $ret_str = $ret_str.'<option value="0" selected disabled>날짜를 선택하세요</option>';
-        } else {
-            $ret_str = $ret_str.'<option value="0" disabled>날짜를 선택하세요</option>';
-        }
+        $ret_str = $ret_str.'<option value="0" disabled>날짜를 선택하세요</option>';
 
         include 'dbconn.php';
-        $query = 'SELECT * FROM attendence_date ORDER BY att_date DESC LIMIT 10;';
+        $query = "SELECT * FROM attendence_date WHERE att_date <= '".$today."' ORDER BY att_date DESC LIMIT 10;";
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         while($row = $stmt->fetch()) {
             if($id == $row['sn']) {
+                $selected = " selected";
+            } else if (($id == 0) && ($row['att_date'] == $today)){
                 $selected = " selected";
             } else {
                 $selected = "";
