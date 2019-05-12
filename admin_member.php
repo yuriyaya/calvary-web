@@ -66,9 +66,6 @@
                             <td></td><td><button type="submit" name="member_search" class="w3-button w3-green">조회</button></td>
                         </tr>
                         <tr>
-                            <td>등록일 : </td><td><input type="date" name="member_join_date" value="<?php if(empty($member_join_date)){echo date("Y-m-d");} else {echo $member_join_date;} ?>"></td>
-                        </tr>
-                        <tr>
                             <td>직분 : </td>
                             <td>
                                 <select class="w3-select w3-border" id="staff" name="member_staff">
