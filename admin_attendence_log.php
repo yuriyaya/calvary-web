@@ -55,7 +55,11 @@
                         include_once "./inc/admin_menu.php";
                         include_once "./inc/func_global.php";
                         if(isset($_POST['att_log_submit'])) {
-                            $part_number = $_POST['part_num'];
+                            if(isset($_POST['part_num'])) {
+                                $part_number = $_POST['part_num'];
+                            } else {
+                                $part_number = 0;
+                            }
                             $date = $_POST['att_date'];
                             include './inc/display_attendence.php';
                             // echo $part_number.'/'.$date.'<br>';
