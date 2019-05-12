@@ -603,6 +603,12 @@
         //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
         //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
         // }
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_normal);
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_newbie);
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_temp);
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_special);
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_pause);
         $att_check_form=$att_check_form.'</table>';
 
         return $att_check_form;
@@ -620,7 +626,7 @@
         return $ret_str;
     }
 
-    function getAttStatChangeOneRow($part_num, $mem_id, $mem_name, $mem_state, $staff_state=null) {
+    function getAttStatChangeOneRowBind($part_num, $date, $mem_list, $staff_state=null) {
         $ret = '';
 
         $status_option = '<select class="w3-select w3-border" name="mem_state_up[]">
@@ -629,33 +635,63 @@
             <option value="6">휴식</option>
             <option value="7">제적</option>
         </select>';
+        $month_start = date('Y-m', strtotime($date.' -3 months')).'-01';
+        $month_end = date('Y-m-t', strtotime($date.' -1 months'));
 
-        $monthly_att_rate_ary = get3monthAttRate($part_num, $mem_id, date('Y-m-d'));
+        include 'dbconn.php';
+        for($idx=0; $idx<count($mem_list); $idx++) {
+            $monthly_att_rate_ary = array();
 
-        $ret = $ret.'<tr>';
-        $ret =  $ret.'<td>';
-        $ret =   $ret.'<input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'';
-        $ret =  $ret.'</td>';
-        $ret =  $ret.'<td>';
-        $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
-        $ret =  $ret.'</td>';
-        if(array_key_exists(0, $monthly_att_rate_ary)){
-            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[0]).'>'.$monthly_att_rate_ary[0].'%</td>';
-        } else {
-            $ret =  $ret.'<td>-%</td>';
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $query = "SELECT * FROM ".getAttMonthlyDBName($part_num)." WHERE date>=:in1 AND date<=:in2 AND id=:in3 ORDER BY date DESC;";
+
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':in1', $in1);
+            $stmt->bindParam(':in2', $in2);
+            $stmt->bindParam(':in3', $in3);
+            $in1 = $month_start;
+            $in2 = $month_end;
+            $in3 = $one_member[0];
+            $stmt->execute();
+            $num_of_rows = $stmt->rowCount();
+
+            if($num_of_rows > 0) {
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt->fetch()) {
+                    array_push($monthly_att_rate_ary, $row['att_month_rate']);
+                }
+            }
+            $ret = $ret.'<tr>';
+            $ret =  $ret.'<td>';
+            $ret =   $ret.'<input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'';
+            $ret =  $ret.'</td>';
+            $ret =  $ret.'<td>';
+            $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
+            $ret =  $ret.'</td>';
+            if(array_key_exists(0, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[0]).'>'.$monthly_att_rate_ary[0].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(1, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[1]).'>'.$monthly_att_rate_ary[1].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(2, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[2]).'>'.$monthly_att_rate_ary[2].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            $ret =  $ret.'<td>'.$status_option.'</td>';
+            $ret = $ret.'</tr>';
+
+            
         }
-        if(array_key_exists(1, $monthly_att_rate_ary)){
-            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[1]).'>'.$monthly_att_rate_ary[1].'%</td>';
-        } else {
-            $ret =  $ret.'<td>-%</td>';
-        }
-        if(array_key_exists(2, $monthly_att_rate_ary)){
-            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[2]).'>'.$monthly_att_rate_ary[2].'%</td>';
-        } else {
-            $ret =  $ret.'<td>-%</td>';
-        }
-        $ret =  $ret.'<td>'.$status_option.'</td>';
-        $ret = $ret.'</tr>';
 
         return $ret;
     }
