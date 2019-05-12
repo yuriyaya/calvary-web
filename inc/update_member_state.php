@@ -95,7 +95,6 @@
                     while($row = $stmt->fetch()) {
                         $member_sn = $row['sn'];
                         $member_id = $row['id'];
-                        $member_join_date = $row['join_date'];
                         $member_staff = $row['church_staff'];
                         $calvary_staff = $row['calvary_staff'];
                     }
