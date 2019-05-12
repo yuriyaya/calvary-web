@@ -5,7 +5,7 @@
     margin-bottom: 20px;
 }
 
-.att_log_part_search {
+.att_log_part_search, .att_stat_update, .attendence_log_month_form {
     margin-left: 20px;
     margin-top: 10px;
     margin-bottom: 10px;

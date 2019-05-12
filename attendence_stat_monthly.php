@@ -15,7 +15,7 @@
         //redirect to attendence log page for each part
         switch($id) {
             case 'sopa':
-                header("Location: ./attendence_stat_3months.php?part_num=1");
+                $part_number = 1;
                 break;
             default:
                 $status_msg_code = '5002';
@@ -53,12 +53,12 @@
                 if(isset($_GET['login']) && ($_GET['login']=='error')) {
                     $status_msg_code = '5000';
                 }
-                include_once "./inc/attendence_stat_menu.php";
-                if(isset($_GET['part_num'])){
-                    $part_number = $_GET['part_num'];
+                if(isset($_POST['att_log_submit'])){
+                    $date = $_POST['att_date'];
                 } else {
-                    $part_number = 0;
+                    $date = date("Y-m").'-01';
                 }
+                include_once "./inc/attendence_stat_menu.php";
             ?>
             <?php
                 if(!empty($status_msg_code)) {
@@ -66,17 +66,25 @@
                     $status_msg_code = '';
                 }
             ?>
-            <?php
-                if(!empty($part_number)) {
-            ?>
-            <form class="att_stat_update" action="./inc/attendence_stat_update.php" method="POST">
-                <?php
-                    echo displayAttStatChangeForm($part_number, date('Y-m-d'));
-                ?>
-                <input type="hidden" name="att_part" value="<?php echo $part_number ?>">
-                <button type="submit" name="update_state_submit" class="w3-button w3-green" id="submit_button">상태 변경</button>
+            <form class="attendence_log_month_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+                <table style="border:0px;">
+                    <tr>
+                        <td>파트 : </td><td><?php echo returnPartName($part_number) ?></td>
+                    </tr>
+                    <tr>
+                        <td>출석월 : </td><td><input type="date" name="att_date" value="<?php echo $date; ?>"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit" name="att_log_submit" class="w3-button w3-green">월간 출석 조회</button>
+                        </td>
+                    </tr>
+                </table>
             </form>
             <?php
+                if(!empty($part_number)) {
+                    echo displayAttendenceMonthlyForm($part_number, $date);
                 }
             ?>
         </div>

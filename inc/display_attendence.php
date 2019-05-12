@@ -501,7 +501,7 @@
 
         $ret =  $ret.'<td>'.($att_val_sat + $att_val_sun + $att_val_others).'</td>';
         $att_rate = (int)((($att_val_sat + $att_val_sun + $att_val_others)/($display_sat + $display_sun + $display_others))*100);
-        $ret =  $ret.'<td><input type="hidden" name="att_month_rate[]" value="'.$att_rate.'">'.$att_rate.'%</td>';
+        $ret =  $ret.'<td'.getBGColorHTML($att_rate).'><input type="hidden" name="att_month_rate[]" value="'.$att_rate.'">'.$att_rate.'%</td>';
         $ret = $ret.'</tr>';
 
         return $ret;
@@ -531,4 +531,166 @@
 
         return $ret;
     }
+
+    function displayAttStatChangeForm($part, $date) {
+
+        $att_check_form = '';
+
+        $att_list_ary = getMemberSNStateFromDB($part, $date);
+        $att_list_staff = $att_list_ary[0];
+        $att_list_normal = $att_list_ary[1];
+        $att_list_newbie = $att_list_ary[2];
+        $att_list_temp = $att_list_ary[3];
+        $att_list_special = $att_list_ary[4];
+        $att_list_pause = $att_list_ary[5];
+
+        //display attendence check form
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table">'.displayAttStatChangeFormHeader($date);
+        
+        foreach($att_list_staff as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2], '파트장');
+        }
+        foreach($att_list_normal as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_newbie as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_temp as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_special as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_pause as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        $att_check_form=$att_check_form.'</table>';
+
+        return $att_check_form;
+    }
+
+    function displayAttStatChangeFormHeader() {
+        $ret_str = '';
+
+        $one_month = strtotime(date('Y-m-d').' -1 months');
+        $two_month = strtotime(date('Y-m-d').' -2 months');
+        $three_month = strtotime(date('Y-m-d').' -3 months');
+
+        $ret_str = '<tr><th>이름</th><th>상태</th><th>'.date('n', $one_month).'월</th><th>'.date('n', $two_month).'월</th><th>'.date('n', $three_month).'월</th><th>상태변경</th>';
+
+        return $ret_str;
+    }
+
+    function getAttStatChangeOneRow($part_num, $mem_id, $mem_name, $mem_state, $staff_state=null) {
+        $ret = '';
+
+        $status_option = '<select class="w3-select w3-border" name="mem_state_up[]">
+            <option value="0" selected>선택</option>
+            <option value="1">정대원</option>
+            <option value="6">휴식</option>
+            <option value="7">제적</option>
+        </select>';
+
+        $monthly_att_rate_ary = get3monthAttRate($part_num, $mem_id, date('Y-m-d'));
+
+        $ret = $ret.'<tr>';
+        $ret =  $ret.'<td>';
+        $ret =   $ret.'<input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'';
+        $ret =  $ret.'</td>';
+        $ret =  $ret.'<td>';
+        $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
+        $ret =  $ret.'</td>';
+        if(array_key_exists(0, $monthly_att_rate_ary)){
+            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[0]).'>'.$monthly_att_rate_ary[0].'%</td>';
+        } else {
+            $ret =  $ret.'<td>-%</td>';
+        }
+        if(array_key_exists(1, $monthly_att_rate_ary)){
+            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[1]).'>'.$monthly_att_rate_ary[1].'%</td>';
+        } else {
+            $ret =  $ret.'<td>-%</td>';
+        }
+        if(array_key_exists(2, $monthly_att_rate_ary)){
+            $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[2]).'>'.$monthly_att_rate_ary[2].'%</td>';
+        } else {
+            $ret =  $ret.'<td>-%</td>';
+        }
+        $ret =  $ret.'<td>'.$status_option.'</td>';
+        $ret = $ret.'</tr>';
+
+        return $ret;
+    }
+
+    function getBGColorHTML($value) {
+        $ret = '';
+        if($value <= 50) {
+            $ret = ' style="background-color:Tomato"';
+        }
+        return $ret;
+    }
+
+    function get3monthAttRate($part_num, $mem_id, $date){
+        $ret_ary = array();
+
+        $month_start = date('Y-m', strtotime($date.' -3 months')).'-01';
+        $month_end = date('Y-m-t', strtotime($date.' -1 months'));
+
+        include 'dbconn.php';
+        $query = "SELECT * FROM ".getAttMonthlyDBName($part_num)." WHERE date>='".$month_start."' AND date<='".$month_end."' AND id=".$mem_id." ORDER BY date DESC;";
+
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $num_of_rows = $stmt->rowCount();
+        // echo $query.'<br>';
+
+        if($num_of_rows > 0) {
+            //already attendence log exist, update data
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $stmt->fetch()) {
+                array_push($ret_ary, $row['att_month_rate']);
+            }
+        }
+
+        return $ret_ary;
+    }
+
+    function getAttMonthlyDBName($part_num) {
+        $ret_db = '';
+
+        switch($part_num){
+            case 1:
+                $ret_db = "attendence_month_sopa";
+                break;
+            case 2:
+                $ret_db = "attendence_month_sopb";
+                break;
+            case 3:
+                $ret_db = "attendence_month_sopbp";
+                break;
+            case 4:
+                $ret_db = "attendence_month_altoa";
+                break;
+            case 5:
+                $ret_db = "attendence_month_altob";
+                break;
+            case 6:
+                $ret_db = "attendence_month_tenor";
+                break;
+            case 7:
+                $ret_db = "attendence_month_bass";
+                break;
+            default:
+                break;
+        }
+
+        return $ret_db;
+    }
+
 ?>
