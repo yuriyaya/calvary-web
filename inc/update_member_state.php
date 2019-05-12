@@ -100,7 +100,7 @@
                     }
 
                     //get current member state from member_state database
-                    $query = "SELECT * FROM member_state WHERE id=".$member_id." ORDER BY sn DESC;";
+                    $query = "SELECT * FROM member_state WHERE id=".$member_id." ORDER BY state_update_date DESC;";
 
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
