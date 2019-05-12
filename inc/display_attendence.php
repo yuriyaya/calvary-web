@@ -329,4 +329,206 @@
 
         return $ret_str;
     }
+
+    function displayAttendenceMonthlyForm($part, $date) {
+
+        $att_check_form = '';
+
+        $last_date = date('Y-m-t', strtotime($date));
+
+        $att_list_ary = getMemberSNStateFromDB($part, $last_date);
+        $att_list_staff = $att_list_ary[0];
+        $att_list_normal = $att_list_ary[1];
+        $att_list_newbie = $att_list_ary[2];
+        $att_list_temp = $att_list_ary[3];
+        $att_list_special = $att_list_ary[4];
+        $att_list_pause = $att_list_ary[5];
+
+        $date_list_ary = getAttLogDateArray($date);
+
+        //display attendence check form
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table">'.dispalyAttLogMonthlyHeader($date);
+        
+        foreach($att_list_staff as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2], '파트장');
+        }
+        foreach($att_list_normal as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_newbie as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_temp as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_special as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        foreach($att_list_pause as $att_list) {
+            // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
+            $att_check_form=$att_check_form.getAttMonthlyOneRow($part, $date_list_ary, $att_list[0], $att_list[1], $att_list[2]);
+        }
+        $att_check_form=$att_check_form.'</table>';
+
+        return $att_check_form;
+    }
+
+    function dispalyAttLogMonthlyHeader($date) {
+        $ret_str = '<tr><th>이름</th><th>상태</th>';
+
+        $att_log_ary = getAttLogDateArray($date);
+
+        $ary_temp = $att_log_ary[0]; //saturday
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
+        }
+
+        $ary_temp = $att_log_ary[1]; //sunday
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
+        }
+
+        $ary_temp = $att_log_ary[2]; //other day
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
+        }
+
+        $ret_str = $ret_str.'<th>토</th><th>일</th><th>합계</th><th>%</th></tr>';
+
+        return $ret_str;
+    }
+
+    function getAttLogDateArray($date) {
+        $ret_ary = array();
+
+        $ary_sat = array();
+        $ary_sun = array();
+        $ary_others = array();
+
+        $month_start = date('Y-m', strtotime($date)).'-01';
+        $month_end = date('Y-m-t', strtotime($date));
+        // echo $month_start.'<br>';
+        // echo $month_end.'<br>';
+
+        include 'dbconn.php';
+        $query = "SELECT * FROM attendence_date WHERE att_date >='".$month_start."' AND att_date <='".$month_end."' ORDER BY att_date ASC;";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        while($row = $stmt->fetch()) {
+            $day = date('w', strtotime($row['att_date']));
+            if($day == 0) {
+                //sunday
+                array_push($ary_sun, $row['att_date']);
+            } else if ($day == 6) {
+                //saturday
+                array_push($ary_sat, $row['att_date']);
+            } else {
+                //others
+                array_push($ary_others, $row['att_date']);
+            }
+        }
+        // echo '<br>----------------<br>';
+        // echo json_encode($ary_sat, JSON_UNESCAPED_UNICODE);
+        // echo '<br>----------------<br>';
+        // echo json_encode($ary_sun, JSON_UNESCAPED_UNICODE);
+        // echo '<br>----------------<br>';
+        // echo json_encode($ary_others, JSON_UNESCAPED_UNICODE);
+        // echo '<br>----------------<br>';
+
+        $ret_ary = array($ary_sat, $ary_sun, $ary_others);
+
+        return $ret_ary;
+    }
+
+    function getAttMonthlyOneRow($part_num, $att_date_list, $mem_id, $mem_name, $mem_state, $staff_state=null) {
+        $ret = '';
+        $att_val_sat = 0;
+        $att_val_sun = 0;
+        $att_val_others = 0;
+        $display_sat = 0;
+        $display_sun = 0;
+        $display_others = 0;
+
+        $ret = $ret.'<tr>';
+        $ret =  $ret.'<td><input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'</td>';
+        $ret =  $ret.'<td>'.getAttendenceFormMemberState($mem_state, $staff_state).'</td>';
+
+        $ary_temp = $att_date_list[0]; //saturday
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $att_val = getAttLogValue($part_num, $ary_temp[$idx], $mem_id);
+            $att_val_sat = $att_val_sat + $att_val;
+            $ret = $ret.'<td>'.$att_val.'</td>';
+        }
+        if(count($ary_temp)>0) {
+            $display_sat =  count($ary_temp);
+        }
+
+        $ary_temp = $att_date_list[1]; //sunday
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $att_val = getAttLogValue($part_num, $ary_temp[$idx], $mem_id);
+            $att_val_sun = $att_val_sun + $att_val;
+            $ret = $ret.'<td>'.$att_val.'</td>';
+        }
+        if(count($ary_temp)>0) {
+            $display_sun =  count($ary_temp);
+        }
+
+        $ary_temp = $att_date_list[2]; //others
+        for($idx=0; $idx<count($ary_temp); $idx++) {
+            $att_val = getAttLogValue($part_num, $ary_temp[$idx], $mem_id);
+            $att_val_others = $att_val_others + $att_val;
+            $ret = $ret.'<td>'.$att_val.'</td>';
+        }
+        if(count($ary_temp)>0) {
+            $display_others =  count($ary_temp);
+        }
+
+        if(!empty($display_sat)) {
+            $ret =  $ret.'<td>'.$att_val_sat.'</td>';
+        }
+        if(!empty($display_sun)) {
+            $ret =  $ret.'<td>'.$att_val_sun.'</td>';
+        }
+        if(!empty($display_others)) {
+            $ret =  $ret.'<td>'.$att_val_others.'</td>';
+        }
+
+        $ret =  $ret.'<td>'.($att_val_sat + $att_val_sun + $att_val_others).'</td>';
+        $att_rate = (int)((($att_val_sat + $att_val_sun + $att_val_others)/($display_sat + $display_sun + $display_others))*100);
+        $ret =  $ret.'<td><input type="hidden" name="att_month_rate[]" value="'.$att_rate.'">'.$att_rate.'%</td>';
+        $ret = $ret.'</tr>';
+
+        return $ret;
+    }
+
+    function getAttLogValue($part, $date, $id) {
+        $ret = 0;
+
+        include 'dbconn.php';
+        $query = "SELECT * FROM ".getAttDBName($part)." WHERE date='".$date."' AND id=".$id.";";
+
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $num_of_rows = $stmt->rowCount();
+        // echo $query.'<br>';
+
+        if($num_of_rows > 0) {
+            //already attendence log exist, update data
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $stmt->fetch()) {
+                if($row['attend_value']==10) {
+                    $ret = 1;
+                }
+            }
+        }
+        // echo $ret.'<br>';
+
+        return $ret;
+    }
 ?>
