@@ -539,31 +539,6 @@
         return $ret;
     }
 
-    function getAttLogValue($part, $date, $id) {
-        $ret = 0;
-
-        include 'dbconn.php';
-        $query = "SELECT * FROM ".getAttDBName($part)." WHERE date='".$date."' AND id=".$id.";";
-
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $num_of_rows = $stmt->rowCount();
-        // echo $query.'<br>';
-
-        if($num_of_rows > 0) {
-            //already attendence log exist, update data
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            while($row = $stmt->fetch()) {
-                if($row['attend_value']==10) {
-                    $ret = 1;
-                }
-            }
-        }
-        // echo $ret.'<br>';
-
-        return $ret;
-    }
-
     function displayAttStatChangeForm($part, $date) {
 
         $att_check_form = '';
@@ -579,30 +554,6 @@
         //display attendence check form
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table">'.displayAttStatChangeFormHeader($date);
         
-        // foreach($att_list_staff as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2], '파트장');
-        // }
-        // foreach($att_list_normal as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
-        // }
-        // foreach($att_list_newbie as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
-        // }
-        // foreach($att_list_temp as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
-        // }
-        // foreach($att_list_special as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
-        // }
-        // foreach($att_list_pause as $att_list) {
-        //     // echo $att_list[0].'<br>'.$att_list[1].'<br>'.$att_list[2].'<br>';
-        //     $att_check_form=$att_check_form.getAttStatChangeOneRow($part, $att_list[0], $att_list[1], $att_list[2]);
-        // }
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_staff, '파트장');
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_normal);
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_newbie);
