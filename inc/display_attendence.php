@@ -130,6 +130,9 @@
     function getAttOneRowBind($part_num, $att_date, $mem_list, $staff_state=null) {
         $ret = '';
 
+        $month_start = date('Y-m', strtotime($att_date.' -3 months')).'-01';
+        $month_end = date('Y-m-t', strtotime($att_date.' -1 months'));
+
         include 'dbconn.php';
         for($idx=0; $idx<count($mem_list); $idx++) {
             $one_member = $mem_list[$idx];
@@ -137,6 +140,7 @@
             $mem_name = $one_member[1];
             $mem_state = $one_member[2];
 
+            //attendence state, check box
             $query = "SELECT * FROM ".getAttDBName($part_num)." WHERE date=:in1 AND id=:in2;";
 
             $stmt = $conn->prepare($query);
@@ -158,6 +162,33 @@
                 }
             }
 
+            //previous 3 month attendence rate
+            $monthly_att_rate_ary = array();
+
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $query_month = "SELECT * FROM ".getAttMonthlyDBName($part_num)." WHERE date>=:in1 AND date<=:in2 AND id=:in3 ORDER BY date DESC;";
+
+            $stmt_month = $conn->prepare($query_month);
+            $stmt_month->bindParam(':in1', $in1);
+            $stmt_month->bindParam(':in2', $in2);
+            $stmt_month->bindParam(':in3', $in3);
+            $in1 = $month_start;
+            $in2 = $month_end;
+            $in3 = $one_member[0];
+            $stmt_month->execute();
+            $num_of_rows_month = $stmt_month->rowCount();
+
+            if($num_of_rows_month > 0) {
+                $stmt_month->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt_month->fetch()) {
+                    array_push($monthly_att_rate_ary, $row['att_month_rate']);
+                }
+            }
+
             $check_form = '<input type="hidden" name="mem_att_val[]" value="off"><input class="w3-check" type="checkbox" name="mem_att_val[]"'.$checked.'>';
 
             $ret = $ret.'<tr>';
@@ -168,9 +199,21 @@
             $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
             $ret =  $ret.'</td>';
             $ret =  $ret.'<td>'.$check_form.'</td>';
-            $ret =  $ret.'<td>-%</td>';
-            $ret =  $ret.'<td>-%</td>';
-            $ret =  $ret.'<td>-%</td>';
+            if(array_key_exists(0, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[0]).'>'.$monthly_att_rate_ary[0].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(1, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[1]).'>'.$monthly_att_rate_ary[1].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(2, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[2]).'>'.$monthly_att_rate_ary[2].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
             $ret = $ret.'</tr>';
 
         }
