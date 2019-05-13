@@ -1,6 +1,6 @@
 <?php
     include_once "./inc/func_global.php";
-    if(!isset($_SESSION['u_id'])) {
+    if(!isset($_SESSION)) {
         session_start();
     }
     $id=null;
