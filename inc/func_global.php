@@ -125,4 +125,36 @@
 
         return $ret_str;
     }
+
+    function returnPartNumberById($part_id) {
+        $ret_num = 0;
+
+        switch($part_id){
+            case 'sopa':
+                $ret_num = 1;
+                break;
+            case 'sopb':
+                $ret_num = 2;
+                break;
+            case 'sopbp':
+                $ret_num = 3;
+                break;
+            case 'altoa':
+                $ret_num = 4;
+                break;
+            case 'altob':
+                $ret_num = 5;
+                break;
+            case 'tenor':
+                $ret_num = 6;
+                break;
+            case 'bass':
+                $ret_num = 7;
+                break;
+            default:
+                break;
+        }
+
+        return $ret_num;
+    }
 ?>

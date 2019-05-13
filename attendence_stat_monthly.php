@@ -11,29 +11,17 @@
 
     if(isset($_GET['login']) && ($_GET['login']=='error')) {
         $status_msg_code = '5000';
-    } else {
+    } else if (!isset($_GET['part_num'])){
         //redirect to attendence log page for each part
         switch($id) {
             case 'sopa':
-                header("Location: ./attendence_log_part.php?part_num=1&id=0");
-                break;
             case 'sopb':
-                header("Location: ./attendence_log_part.php?part_num=2&id=0");
-                break;
             case 'sopbp':
-                header("Location: ./attendence_log_part.php?part_num=3&id=0");
-                break;
             case 'altoa':
-                header("Location: ./attendence_log_part.php?part_num=4&id=0");
-                break;
             case 'altob':
-                header("Location: ./attendence_log_part.php?part_num=5&id=0");
-                break;
             case 'tenor':
-                header("Location: ./attendence_log_part.php?part_num=6&id=0");
-                break;
             case 'bass':
-                header("Location: ./attendence_log_part.php?part_num=7&id=0");
+                $part_number = returnPartNumberById($id);
                 break;
             default:
                 $status_msg_code = '5002';
@@ -49,6 +37,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/attendence_log.css">
     <style>
         * {font-family: "Raleway", sans-serif}
     </style>
@@ -65,12 +54,47 @@
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
             <?php
+                include_once "./inc/func_global.php";
+                include_once "./inc/display_attendence.php";
+                if(isset($_GET['login']) && ($_GET['login']=='error')) {
+                    $status_msg_code = '5000';
+                }
+                if(isset($_POST['att_log_submit'])){
+                    $date = $_POST['att_date'];
+                } else {
+                    $date = date("Y-m").'-01';
+                }
+                include_once "./inc/attendence_stat_menu.php";
+            ?>
+            <?php
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
                 }
             ?>
+            <form class="attendence_log_month_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+                <table style="border:0px;">
+                    <tr>
+                        <td>파트 : </td><td><?php echo returnPartName($part_number) ?></td>
+                    </tr>
+                    <tr>
+                        <td>출석월 : </td><td><input type="date" name="att_date" value="<?php echo $date; ?>"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit" name="att_log_submit" class="w3-button w3-green">월간 출석 조회</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <?php
+                if(!empty($part_number)) {
+                    echo displayAttendenceMonthlyForm($part_number, $date);
+                }
+            ?>
         </div>
+        
         <!-- !END PAGE CONTENT! -->
 
         <script type="text/javascript" src="./js/menu.js"></script>
