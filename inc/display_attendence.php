@@ -130,6 +130,9 @@
     function getAttOneRowBind($part_num, $att_date, $mem_list, $staff_state=null) {
         $ret = '';
 
+        $month_start = date('Y-m', strtotime($att_date.' -3 months')).'-01';
+        $month_end = date('Y-m-t', strtotime($att_date.' -1 months'));
+
         include 'dbconn.php';
         for($idx=0; $idx<count($mem_list); $idx++) {
             $one_member = $mem_list[$idx];
@@ -137,6 +140,7 @@
             $mem_name = $one_member[1];
             $mem_state = $one_member[2];
 
+            //attendence state, check box
             $query = "SELECT * FROM ".getAttDBName($part_num)." WHERE date=:in1 AND id=:in2;";
 
             $stmt = $conn->prepare($query);
@@ -158,6 +162,33 @@
                 }
             }
 
+            //previous 3 month attendence rate
+            $monthly_att_rate_ary = array();
+
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $query_month = "SELECT * FROM ".getAttMonthlyDBName($part_num)." WHERE date>=:in1 AND date<=:in2 AND id=:in3 ORDER BY date DESC;";
+
+            $stmt_month = $conn->prepare($query_month);
+            $stmt_month->bindParam(':in1', $in1);
+            $stmt_month->bindParam(':in2', $in2);
+            $stmt_month->bindParam(':in3', $in3);
+            $in1 = $month_start;
+            $in2 = $month_end;
+            $in3 = $one_member[0];
+            $stmt_month->execute();
+            $num_of_rows_month = $stmt_month->rowCount();
+
+            if($num_of_rows_month > 0) {
+                $stmt_month->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt_month->fetch()) {
+                    array_push($monthly_att_rate_ary, $row['att_month_rate']);
+                }
+            }
+
             $check_form = '<input type="hidden" name="mem_att_val[]" value="off"><input class="w3-check" type="checkbox" name="mem_att_val[]"'.$checked.'>';
 
             $ret = $ret.'<tr>';
@@ -168,9 +199,21 @@
             $ret =   $ret.'<input type="hidden" name="mem_state[]" value="'.$mem_state.'">'.getAttendenceFormMemberState($mem_state, $staff_state);
             $ret =  $ret.'</td>';
             $ret =  $ret.'<td>'.$check_form.'</td>';
-            $ret =  $ret.'<td>-%</td>';
-            $ret =  $ret.'<td>-%</td>';
-            $ret =  $ret.'<td>-%</td>';
+            if(array_key_exists(0, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[0]).'>'.$monthly_att_rate_ary[0].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(1, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[1]).'>'.$monthly_att_rate_ary[1].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
+            if(array_key_exists(2, $monthly_att_rate_ary)){
+                $ret =  $ret.'<td'.getBGColorHTML($monthly_att_rate_ary[2]).'>'.$monthly_att_rate_ary[2].'%</td>';
+            } else {
+                $ret =  $ret.'<td>-%</td>';
+            }
             $ret = $ret.'</tr>';
 
         }
@@ -702,6 +745,118 @@
         }
 
         return $ret_db;
+    }
+
+    function displayAttendenceYearForm($part, $date) {
+
+        $att_year_form = '';
+
+        $last_date = date('Y-m-t', strtotime($date.' -1 months'));
+
+        $att_list_ary = getMemberSNStateFromDB($part, $last_date);
+        $att_list_staff = $att_list_ary[0];
+        $att_list_normal = $att_list_ary[1];
+        $att_list_newbie = $att_list_ary[2];
+        $att_list_temp = $att_list_ary[3];
+        $att_list_special = $att_list_ary[4];
+        $att_list_pause = $att_list_ary[5];
+
+        //display attendence check form
+        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table">'.dispalyAttLogYearHeader($date);
+
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_normal);
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_newbie);
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_temp);
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_special);
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_pause);
+
+        $att_year_form=$att_year_form.'</table>';
+
+        return $att_year_form;
+    }
+
+    function dispalyAttLogYearHeader($date) {
+
+        $ret_str = '<tr><th>이름</th><th>상태</th>';
+    
+        $ret_str = $ret_str.'<th>1월</th>';
+        $ret_str = $ret_str.'<th>2월</th>';
+        $ret_str = $ret_str.'<th>3월</th>';
+        $ret_str = $ret_str.'<th>4월</th>';
+        $ret_str = $ret_str.'<th>5월</th>';
+        $ret_str = $ret_str.'<th>6월</th>';
+        $ret_str = $ret_str.'<th>7월</th>';
+        $ret_str = $ret_str.'<th>8월</th>';
+        $ret_str = $ret_str.'<th>9월</th>';
+        $ret_str = $ret_str.'<th>10월</th>';
+        $ret_str = $ret_str.'<th>11월</th>';
+        $ret_str = $ret_str.'<th>12월</th>';
+
+        $ret_str = $ret_str.'<th>평균(%)</th></tr>';
+
+        return $ret_str;
+    }
+
+    function getAttYearOneRowBind($part_num, $date, $mem_list, $staff_state=null) {
+        $ret = '';
+
+        $year_start = date('Y', strtotime($date)).'-01-01'; //first day or year
+        $year_end = date('Y', strtotime($date)).'-12-31'; //last day of year
+        // echo $year_start.'<br>';
+        // echo $year_end.'<br>';
+
+        include 'dbconn.php';
+
+        for($idx=0; $idx<count($mem_list); $idx++) {
+
+            $att_rate_ary = array_fill(0, 12, 0);
+
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $ret = $ret.'<tr>';
+            $ret =  $ret.'<td><input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'</td>';
+            $ret =  $ret.'<td>'.getAttendenceFormMemberState($mem_state, $staff_state).'</td>';
+
+            $query = "SELECT * FROM ".getAttMonthlyDBName($part_num)." WHERE date>=:in1 AND date<=:in2 AND id=:in3 ORDER BY date ASC;";
+
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':in1', $in1);
+            $stmt->bindParam(':in2', $in2);
+            $stmt->bindParam(':in3', $in3);
+            $in1 = $year_start;
+            $in2 = $year_end;
+            $in3 = $one_member[0];
+            $stmt->execute();
+            $num_of_rows = $stmt->rowCount();
+
+            $att_val=0;
+            if($num_of_rows > 0) {
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt->fetch()) {
+                    $att_date = $row['date'];
+                    $month = (int)(date('n', strtotime($att_date)));
+                    // echo $month.'<br>';
+                    $att_rate_ary[$month-1] = $row['att_month_rate'];
+                }
+            }
+
+            // echo json_encode($att_rate_ary);
+            // echo '<br>';
+
+            for($idx_month=0; $idx_month<12; $idx_month++) {
+                $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
+            }
+            $avg_att_rate = (int)(array_sum($att_rate_ary)/(int)date('n', strtotime($date.' -1 months')));
+            $ret =  $ret.'<td'.getBGColorHTML($avg_att_rate).'>'.$avg_att_rate.'%</td>';
+            
+        }
+        $ret = $ret.'</tr>';
+
+        return $ret;
     }
 
 ?>
