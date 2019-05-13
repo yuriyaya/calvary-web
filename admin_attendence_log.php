@@ -64,9 +64,9 @@
                             include './inc/display_attendence.php';
                             // echo $part_number.'/'.$date.'<br>';
                             if(empty($part_number)) {
-                                $status_msg_code = '100';
+                                $status_msg_code = '9050';
                             } else if(empty(checkAttLogDayByDate($date))) {
-                                $status_msg_code = '110';
+                                $status_msg_code = '9051';
                             } else{
                                 $success = true;
                             }
