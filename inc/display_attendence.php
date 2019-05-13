@@ -95,7 +95,7 @@
         $two_month = strtotime($date.' -2 months');
         $three_month = strtotime($date.' -3 months');
 
-        $ret_str = '<tr><th>이름</th><th>상태</th><th>출석</th><th>'.date('n', $one_month).'월</th><th>'.date('n', $two_month).'월</th><th>'.date('n', $three_month).'월</th><th>상태변경</th>';
+        $ret_str = '<tr><th>이름</th><th>상태</th><th>출석</th><th>'.date('n', $one_month).'월</th><th>'.date('n', $two_month).'월</th><th>'.date('n', $three_month).'월</th></tr>';
 
         return $ret_str;
     }
@@ -129,13 +129,6 @@
 
     function getAttOneRowBind($part_num, $att_date, $mem_list, $staff_state=null) {
         $ret = '';
-        
-        $status_option = '<select class="w3-select w3-border" name="mem_state_up[]">
-            <option value="0" selected>선택</option>
-            <option value="1">정대원</option>
-            <option value="6">휴식</option>
-            <option value="7">제적</option>
-        </select>';
 
         include 'dbconn.php';
         for($idx=0; $idx<count($mem_list); $idx++) {
@@ -178,7 +171,6 @@
             $ret =  $ret.'<td>-%</td>';
             $ret =  $ret.'<td>-%</td>';
             $ret =  $ret.'<td>-%</td>';
-            $ret =  $ret.'<td>'.$status_option.'</td>';
             $ret = $ret.'</tr>';
 
         }
