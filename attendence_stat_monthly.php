@@ -15,7 +15,13 @@
         //redirect to attendence log page for each part
         switch($id) {
             case 'sopa':
-                $part_number = 1;
+            case 'sopb':
+            case 'sopbp':
+            case 'altoa':
+            case 'altob':
+            case 'tenor':
+            case 'bass':
+                $part_number = returnPartNumberById($id);
                 break;
             default:
                 $status_msg_code = '5002';

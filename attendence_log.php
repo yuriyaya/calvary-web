@@ -17,6 +17,24 @@
             case 'sopa':
                 header("Location: ./attendence_log_part.php?part_num=1&id=0");
                 break;
+            case 'sopb':
+                header("Location: ./attendence_log_part.php?part_num=2&id=0");
+                break;
+            case 'sopbp':
+                header("Location: ./attendence_log_part.php?part_num=3&id=0");
+                break;
+            case 'altoa':
+                header("Location: ./attendence_log_part.php?part_num=4&id=0");
+                break;
+            case 'altob':
+                header("Location: ./attendence_log_part.php?part_num=5&id=0");
+                break;
+            case 'tenor':
+                header("Location: ./attendence_log_part.php?part_num=6&id=0");
+                break;
+            case 'bass':
+                header("Location: ./attendence_log_part.php?part_num=7&id=0");
+                break;
             default:
                 $status_msg_code = '5002';
                 break;

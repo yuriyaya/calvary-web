@@ -15,7 +15,13 @@
         //redirect to attendence log page for each part
         switch($id) {
             case 'sopa':
-                header("Location: ./attendence_stat_3months.php?part_num=1");
+            case 'sopb':
+            case 'sopbp':
+            case 'altoa':
+            case 'altob':
+            case 'tenor':
+            case 'bass':
+                header("Location: ./attendence_stat_3months.php?part_num=".returnPartNumberById($id));
                 break;
             default:
                 $status_msg_code = '5002';

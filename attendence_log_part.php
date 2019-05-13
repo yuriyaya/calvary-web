@@ -46,7 +46,10 @@
                     <tr>
                         <td>출석일 :</td>
                         <td><?php echo displayAttSearchOpt($id); ?></td>
-                        <td><button type="submit" name="search_submit" class="w3-button w3-green" id="submit_search_button">조회</button></td>
+                        <td>
+                            <input type="hidden" name="att_part" value="<?php echo $part_number ?>">
+                            <button type="submit" name="search_submit" class="w3-button w3-green" id="submit_search_button">조회</button>
+                        </td>
                     </tr>
                 </table>
             </form>
