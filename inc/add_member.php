@@ -163,12 +163,13 @@
                 }
 
                 if(empty($status_msg_code)){
-                    $query = "UPDATE member_info SET id = :member_id, name = :member_name, part = :member_part, church_staff = :member_staff WHERE sn = :member_sn";
+                    $query = "UPDATE member_info SET id = :member_id, name = :member_name, part = :member_part, church_staff = :member_staff, calvary_staff = :member_calvary_staff WHERE sn = :member_sn";
                     $stmt = $conn->prepare($query);
                     $stmt->bindParam(':member_id', $member_id, PDO::PARAM_INT);
                     $stmt->bindParam(':member_name', $member_name, PDO::PARAM_STR);
                     $stmt->bindParam(':member_part', $member_part, PDO::PARAM_INT);
                     $stmt->bindParam(':member_staff', $member_staff, PDO::PARAM_INT);
+                    $stmt->bindParam(':member_calvary_staff', $calvary_staff, PDO::PARAM_INT);
                     $stmt->bindParam(':member_sn', $member_sn, PDO::PARAM_INT);
                     $stmt->execute();
 
