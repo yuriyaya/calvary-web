@@ -684,7 +684,7 @@
 
     function getBGColorHTML($value) {
         $ret = '';
-        if($value <= 50) {
+        if($value < 50) {
             $ret = ' style="background-color:Tomato"';
         }
         return $ret;
