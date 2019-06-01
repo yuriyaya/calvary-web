@@ -23,12 +23,17 @@
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
             <?php
                 include_once "./inc/func_global.php";
-                if(isset($_GET['login']) && ($_GET['login']=='error')) {
-                    $status_msg_code = '5000';
+                if(isset($_SESSION['u_id'])) {
+                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'operator')) {
+                        $status_msg_code = '5002';
+                        
+                    } else {
+                        include_once "./inc/attendence_stat_menu.php";
+                    }
+                } else {
+                    $status_msg_code = '5001';
                 }
-                include_once "./inc/attendence_stat_menu.php";
-            ?>
-            <?php
+                //ALERT!
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
