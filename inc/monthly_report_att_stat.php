@@ -374,6 +374,7 @@
     function getNewbieAttStatForMonthlyReport($mem_list, $sum_array, $start_date, $end_date) {
 
         include "dbconn.php";
+        include_once "func_global.php";
 
         for($idx=0; $idx<count($mem_list); $idx++) {
 
@@ -382,7 +383,7 @@
             $mem_name = $one_member[1];
             $mem_state = $one_member[2];
 
-            $query = "SELECT date, sum(attend_value) FROM ".getPartNumberByMemberId($mem_id)." WHERE id=:in1 AND date IN (SELECT att_date FROM attendence_date WHERE type=:in2 AND att_date>='".$start_date."' AND att_date<='".$end_date."' ORDER BY att_date ASC) GROUP BY date;";
+            $query = "SELECT date, sum(attend_value) FROM ".getPartDBNameByMemberId($mem_id)." WHERE id=:in1 AND date IN (SELECT att_date FROM attendence_date WHERE type=:in2 AND att_date>='".$start_date."' AND att_date<='".$end_date."' ORDER BY att_date ASC) GROUP BY date;";
 
             $stmt = $conn->prepare($query);
             $stmt->bindParam(':in1', $in1);
@@ -424,39 +425,6 @@
         }
 
         return $sum_array;
-    }
-
-    function getPartNumberByMemberId($member_id) {
-        $ret_db = '';
-
-        $part_num = (int)($member_id/10000);
-        switch($part_num){
-            case 1:
-                $ret_db = "attendence_sopa";
-                break;
-            case 2:
-                $ret_db = "attendence_sopb";
-                break;
-            case 3:
-                $ret_db = "attendence_sopbp";
-                break;
-            case 4:
-                $ret_db = "attendence_altoa";
-                break;
-            case 5:
-                $ret_db = "attendence_altob";
-                break;
-            case 6:
-                $ret_db = "attendence_tenor";
-                break;
-            case 7:
-                $ret_db = "attendence_bass";
-                break;
-            default:
-                break;
-        }
-
-        return $ret_db;
     }
 
 ?>

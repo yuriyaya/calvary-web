@@ -14,7 +14,7 @@
                     <option value="sopbp">소프라노B+</option>
                     <option value="altoa">알토A</option>
                     <option value="altob">알토B</option>
-                    <option value="tenner">테너</option>
+                    <option value="tenor">테너</option>
                     <option value="bass">베이스</option>
                     <option value="operator">임원단</option>
                     <option value="admin">관리자</option>
