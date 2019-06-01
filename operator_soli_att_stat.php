@@ -55,7 +55,7 @@
                                 $member_id = $row['id'];
                                 $member_name = $row['name'];
                                 
-                                $attendence_db_name = getPartNumberByMemberId($member_id);
+                                $attendence_db_name = getPartDBNameByMemberId($member_id);
 
                                 $query_att = "SELECT sum(attend_value) FROM ".$attendence_db_name." WHERE date>='".$date_start."' AND date <='".$date_end."' AND id=:in1 GROUP BY id;";
 

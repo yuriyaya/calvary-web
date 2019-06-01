@@ -158,7 +158,7 @@
         return $ret_num;
     }
 
-    function getPartNumberByMemberId($member_id) {
+    function getPartDBNameByMemberId($member_id) {
         $ret_db = '';
 
         $part_num = (int)($member_id/10000);
@@ -183,6 +183,38 @@
                 break;
             case 7:
                 $ret_db = "attendence_bass";
+                break;
+            default:
+                break;
+        }
+
+        return $ret_db;
+    }
+
+    function getMonthlyPartDBNameByPartNumber($part_number) {
+        $ret_db = '';
+
+        switch($part_number){
+            case 1:
+                $ret_db = "attendence_month_sopa";
+                break;
+            case 2:
+                $ret_db = "attendence_month_sopb";
+                break;
+            case 3:
+                $ret_db = "attendence_month_sopbp";
+                break;
+            case 4:
+                $ret_db = "attendence_month_altoa";
+                break;
+            case 5:
+                $ret_db = "attendence_month_altob";
+                break;
+            case 6:
+                $ret_db = "attendence_month_tenor";
+                break;
+            case 7:
+                $ret_db = "attendence_month_bass";
                 break;
             default:
                 break;

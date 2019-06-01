@@ -383,7 +383,7 @@
             $mem_name = $one_member[1];
             $mem_state = $one_member[2];
 
-            $query = "SELECT date, sum(attend_value) FROM ".getPartNumberByMemberId($mem_id)." WHERE id=:in1 AND date IN (SELECT att_date FROM attendence_date WHERE type=:in2 AND att_date>='".$start_date."' AND att_date<='".$end_date."' ORDER BY att_date ASC) GROUP BY date;";
+            $query = "SELECT date, sum(attend_value) FROM ".getPartDBNameByMemberId($mem_id)." WHERE id=:in1 AND date IN (SELECT att_date FROM attendence_date WHERE type=:in2 AND att_date>='".$start_date."' AND att_date<='".$end_date."' ORDER BY att_date ASC) GROUP BY date;";
 
             $stmt = $conn->prepare($query);
             $stmt->bindParam(':in1', $in1);
