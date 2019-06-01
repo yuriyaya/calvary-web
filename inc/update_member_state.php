@@ -44,6 +44,41 @@
                     $in3 = $member_state;
                     $stmt->execute();
 
+                    //check last state update date in member_state DB to check whether last_state(member_info) should be updated or not
+                    $query = "SELECT * FROM member_state WHERE id=".$member_id." ORDER BY state_update_date DESC LIMIT 1;";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $num_of_rows = $stmt->rowCount();
+                    $last_update_date = '0000-00-00';
+                    if($num_of_rows == 1) {
+                        while($row = $stmt->fetch()) {
+                            $last_update_date = $row['state_update_date'];
+                        }
+                    }
+
+                    if(strtotime($state_update_date) >= strtotime($last_update_date)) {
+                        //update last_state in member_info table
+                        $query = "SELECT sn FROM member_info WHERE id=".$member_id.";";
+                        $stmt = $conn->prepare($query);
+                        $stmt->execute();
+                        $num_of_rows = $stmt->rowCount();
+                        $sn = 0;
+                        if($num_of_rows == 1) {
+                            while($row = $stmt->fetch()) {
+                                $sn = $row['sn'];
+                            }
+                            //update member_info table
+                            $query = "UPDATE member_info SET last_state=".$member_state." WHERE sn=".$sn.";";
+                            $stmt = $conn->prepare($query);
+                            $stmt->execute();
+                        } else {
+                            $status_msg_code = "9033";
+                        }
+
+                    } else {
+                        //do not update last_state
+                    }
+
                     $status_msg_code = "9031";
                 }
             }

@@ -47,7 +47,7 @@
                     // echo $member_id;
                 }
 
-                $query = "INSERT INTO member_info (id, name, part, church_staff, calvary_staff) VALUES (:in1, :in2, :in3, :in4, :in5)";
+                $query = "INSERT INTO member_info (id, name, part, church_staff, calvary_staff, last_state) VALUES (:in1, :in2, :in3, :in4, :in5, 0)";
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(':in1', $in1);
                 $stmt->bindParam(':in2', $in2);
