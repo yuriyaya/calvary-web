@@ -41,10 +41,11 @@
                             $stmt = $conn->prepare($query);
                             $stmt->execute();
                             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                            $result_html = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th><th>변동일</th><th>상태</th><tr>';
+                            $result_html = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th><th>변동일</th><th>상태</th></tr>';
                             while($row = $stmt->fetch()) {
                                 $result_html = $result_html.'<tr><td>'.returnPartName($row['part']).'</td><td>'.$row['name'].'</td><td>'.$row['state_update_date'].'</td><td>'.getMemberStateString($row['state']).'</td></tr>';
                             }
+                            $result_html = $result_html.'</table>';
                         }
                     } else {
                         $status_msg_code = '5003';
