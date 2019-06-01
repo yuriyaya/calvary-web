@@ -1,27 +1,3 @@
-<?php
-    include_once "./inc/func_global.php";
-    if(!isset($_SESSION)) {
-        session_start();
-    }
-    $id=null;
-    if(isset($_SESSION['u_id'])){
-        $id=$_SESSION['u_id'];
-        
-    }
-
-    if(isset($_GET['login']) && ($_GET['login']=='error')) {
-        $status_msg_code = '5000';
-    } else {
-        //redirect to attendence log page for each part
-        switch($id) {
-            case 'admin':
-                break;
-            default:
-                $status_msg_code = '5002';
-                break;
-        }
-    }
-?>
 <!DOCTYPE html>
 <html>
     <title>영락교회 갈보리 찬양대</title>
@@ -50,7 +26,7 @@
             <?php
                 $success = false;
                 if(isset($_SESSION['u_id'])) {
-                    if($_SESSION['u_id'] == 'admin') {
+                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
                         include_once "./inc/operator_menu.php";
                         include_once "./inc/func_global.php";
                         if(isset($_POST['att_log_submit'])) {
@@ -68,7 +44,11 @@
                                 $success = true;
                             }
                         }
+                    } else {
+                        $status_msg_code = '5003';
                     }
+                } else {
+                    $status_msg_code = '5001';
                 }
             ?>
             <?php
