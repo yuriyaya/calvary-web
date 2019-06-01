@@ -271,7 +271,7 @@
         $id_prev = 0;
 
         include 'dbconn.php';
-        $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<'".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.name ASC, ms.state_update_date DESC;";
+        $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.name ASC, ms.state_update_date DESC;";
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -615,11 +615,17 @@
     function getAttStatChangeOneRowBind($part_num, $date, $mem_list, $staff_state=null) {
         $ret = '';
 
-        $status_option = '<select class="w3-select w3-border" name="mem_state_up[]">
+        $status_option = '<select class="w3-select w3-border" id="state" name="mem_state_up[]">
             <option value="0" selected>선택</option>
             <option value="1">정대원</option>
+            <option value="2">솔리스트</option>
+            <option value="3">신입</option>
+            <option value="4">임시</option>
+            <option value="5">특별</option>
             <option value="6">휴식</option>
             <option value="7">제적</option>
+            <option value="8">은퇴</option>
+            <option value="9">명예</option>
         </select>';
         $month_start = date('Y-m', strtotime($date.' -3 months')).'-01';
         $month_end = date('Y-m-t', strtotime($date.' -1 months'));
