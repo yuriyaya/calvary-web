@@ -157,4 +157,37 @@
 
         return $ret_num;
     }
+
+    function getPartNumberByMemberId($member_id) {
+        $ret_db = '';
+
+        $part_num = (int)($member_id/10000);
+        switch($part_num){
+            case 1:
+                $ret_db = "attendence_sopa";
+                break;
+            case 2:
+                $ret_db = "attendence_sopb";
+                break;
+            case 3:
+                $ret_db = "attendence_sopbp";
+                break;
+            case 4:
+                $ret_db = "attendence_altoa";
+                break;
+            case 5:
+                $ret_db = "attendence_altob";
+                break;
+            case 6:
+                $ret_db = "attendence_tenor";
+                break;
+            case 7:
+                $ret_db = "attendence_bass";
+                break;
+            default:
+                break;
+        }
+
+        return $ret_db;
+    }
 ?>

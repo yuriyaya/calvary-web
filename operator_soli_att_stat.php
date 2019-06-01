@@ -29,7 +29,6 @@
             
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
                         include_once "./inc/operator_menu.php";
-                        include_once "./inc/display_attendence.php";
                         
                         if(isset($_POST['soli_att_submit'])) {
                             $date_start = $_POST['att_date_start'];
@@ -45,7 +44,41 @@
                                 $att_date_cnt = $row['count(att_date)'];
                             }
 
-                            $search_result_info = $att_date_cnt;
+                            $query = "SELECT id, name FROM member_info WHERE last_state=2 ORDER BY id ASC;";
+                            $stmt = $conn->prepare($query);
+                            $stmt->execute();
+                            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                            $member_id = 0;
+                            $search_result_info = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th><th>출석률</th></tr>';
+                            while($row = $stmt->fetch()) {
+
+                                $member_id = $row['id'];
+                                $member_name = $row['name'];
+                                
+                                $attendence_db_name = getPartNumberByMemberId($member_id);
+
+                                $query_att = "SELECT sum(attend_value) FROM ".$attendence_db_name." WHERE date>='".$date_start."' AND date <='".$date_end."' AND id=:in1 GROUP BY id;";
+
+                                $stmt_att = $conn->prepare($query_att);
+                                $stmt_att->bindParam(':in1', $in1);
+                                $in1 = $member_id;
+                                $stmt_att->execute();
+                                $num_of_rows = $stmt_att->rowCount();
+
+
+                                if($num_of_rows == 1) {
+                                    $stmt_att->setFetchMode(PDO::FETCH_ASSOC);
+                                    while($row = $stmt_att->fetch()) {
+                                        $part_num = (int)($member_id/10000);
+                                        $att_rate = (int)($row['sum(attend_value)']/10);
+                                        $att_rate = round(($att_rate/$att_date_cnt)*100);
+                                        $search_result_info = $search_result_info.'<tr><td>'.returnPartName($part_num).'</td><td>'.$member_name.'</td><td>'.$att_rate.'%</td></tr>';
+                                    }
+                                }
+                                
+                            }
+                            $search_result_info = $search_result_info.'</table>';
+
                         }
                     } else {
                         $status_msg_code = '5003';
@@ -64,8 +97,8 @@
                 <form class="search_soli_att_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
-                            <td>조회 기간 : </td><td><input type="date" name="att_date_start" value="<?php if(empty($att_date_start)){echo date('Y-m').'-01';} else {echo $att_date_start;} ?>"></td>
-                            <td> ~ <input type="date" name="att_date_end" value="<?php if(empty($att_date_end)){echo date('Y-m-t');} else {echo $att_date_end;} ?>"></td>
+                            <td>조회 기간 : </td><td><input type="date" name="att_date_start" value="<?php if(empty($date_start)){echo date('Y-m').'-01';} else {echo $date_start;} ?>"></td>
+                            <td> ~ <input type="date" name="att_date_end" value="<?php if(empty($date_end)){echo date('Y-m-t');} else {echo $date_end;} ?>"></td>
                         </tr>
                         <tr>
                             <td></td>
