@@ -115,7 +115,7 @@
             $flag_of_sunday = 1;
         }
 
-        $str_html = '<table class="w3-table-all w3-hoverable" id="monthly_report_stat"><tr><th></th><th></th><th>소프라노</th><th>알토</th><th>테너</th><th>베이스</th><th>신입</th><th>재적</th><th>계</th><th>%</th></tr>';
+        $str_html = '<table class="w3-table-all w3-hoverable" id="monthly_report_stat" style="width:700px"><tr><th></th><th></th><th>소프라노</th><th>알토</th><th>테너</th><th>베이스</th><th>신입</th><th>재적</th><th>계</th><th>%</th></tr>';
         $total_all_count = array_sum($total_member_count)+$total_newbie_count;
         $str_html = $str_html.'<tr><td></td><td>재적</td><td>'.$total_member_count[0].'</td><td>'.$total_member_count[1].'</td><td>'.$total_member_count[2].'</td><td>'.$total_member_count[3].'</td><td>'.$total_newbie_count.'</td><td>'.array_sum($total_member_count).'</td><td>'.($total_all_count).'</td><td></td></tr>';
 

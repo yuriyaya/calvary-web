@@ -370,7 +370,7 @@
         $date_list_ary = getAttLogDateArray($date);
 
         //display attendence check form
-        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table">'.dispalyAttLogMonthlyHeader($date);
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogMonthlyHeader($date);
 
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_staff, $date_list_ary, '파트장');
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_normal, $date_list_ary);
@@ -768,7 +768,7 @@
         $att_list_pause = $att_list_ary[5];
 
         //display attendence check form
-        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table">'.dispalyAttLogYearHeader($date);
+        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogYearHeader($date);
 
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_staff, '파트장');
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_normal);
