@@ -690,8 +690,12 @@
 
     function getBGColorHTML($value) {
         $ret = '';
-        if($value < 50) {
-            $ret = ' style="background-color:Tomato"';
+        if(($value < 50) && ($value > 0)) {
+            $ret = ' class="w3-red"';
+        } else if ($value == 100) {
+            $ret = ' class="w3-green"';
+        } else {
+            //
         }
         return $ret;
     }
@@ -768,7 +772,7 @@
         $att_list_pause = $att_list_ary[5];
 
         //display attendence check form
-        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogYearHeader($date);
+        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogYearHeader();
 
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_staff, '파트장');
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_normal);
@@ -782,7 +786,7 @@
         return $att_year_form;
     }
 
-    function dispalyAttLogYearHeader($date) {
+    function dispalyAttLogYearHeader() {
 
         $ret_str = '<tr><th>이름</th><th>상태</th>';
     
@@ -854,7 +858,14 @@
             // echo '<br>';
 
             for($idx_month=0; $idx_month<12; $idx_month++) {
-                $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
+                // if(($att_rate_ary[$idx_month] < 50) && ($att_rate_ary[$idx_month] > 0)) {
+                //     $ret = $ret.'<td class="w3-red">'.$att_rate_ary[$idx_month].'</td>';
+                // } else if($att_rate_ary[$idx_month] == 100) {
+                //     $ret = $ret.'<td class="w3-green">'.$att_rate_ary[$idx_month].'</td>';
+                // } else {
+                //     $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
+                // }
+                $ret = $ret.'<td'.getBGColorHTML($att_rate_ary[$idx_month]).'>'.$att_rate_ary[$idx_month].'</td>';
             }
             $avg_att_rate = (int)(array_sum($att_rate_ary)/(int)date('n', strtotime($date.' -1 months')));
             $ret =  $ret.'<td'.getBGColorHTML($avg_att_rate).'>'.$avg_att_rate.'%</td>';

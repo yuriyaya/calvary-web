@@ -46,7 +46,7 @@
                                 $stmt = $conn->prepare($query);
                                 $stmt->execute();
                                 $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                                $result_html = $result_html.'<tr><td>'.returnPartName($part_num).'</td>';
+                                $result_html = $result_html.'<tr><td style="width:150px">'.returnPartName($part_num).'</td>';
                                 $record_cnt = 0;
                                 while($row = $stmt->fetch()) {
                                     if($record_cnt == 0) {
