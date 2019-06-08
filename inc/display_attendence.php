@@ -768,7 +768,7 @@
         $att_list_pause = $att_list_ary[5];
 
         //display attendence check form
-        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogYearHeader($date);
+        $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogYearHeader();
 
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_staff, '파트장');
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_normal);
@@ -782,7 +782,7 @@
         return $att_year_form;
     }
 
-    function dispalyAttLogYearHeader($date) {
+    function dispalyAttLogYearHeader() {
 
         $ret_str = '<tr><th>이름</th><th>상태</th>';
     
