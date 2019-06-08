@@ -690,8 +690,12 @@
 
     function getBGColorHTML($value) {
         $ret = '';
-        if($value < 50) {
-            $ret = ' style="background-color:Tomato"';
+        if(($value < 50) && ($value > 0)) {
+            $ret = ' class="w3-red"';
+        } else if ($value == 100) {
+            $ret = ' class="w3-green"';
+        } else {
+            //
         }
         return $ret;
     }
@@ -854,13 +858,14 @@
             // echo '<br>';
 
             for($idx_month=0; $idx_month<12; $idx_month++) {
-                if(($att_rate_ary[$idx_month] < 50) && ($att_rate_ary[$idx_month] > 0)) {
-                    $ret = $ret.'<td style="background-color:Tomato">'.$att_rate_ary[$idx_month].'</td>';
-                } else if($att_rate_ary[$idx_month] == 100) {
-                    $ret = $ret.'<td style="background-color:MediumSeaGreen">'.$att_rate_ary[$idx_month].'</td>';
-                } else {
-                    $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
-                }
+                // if(($att_rate_ary[$idx_month] < 50) && ($att_rate_ary[$idx_month] > 0)) {
+                //     $ret = $ret.'<td class="w3-red">'.$att_rate_ary[$idx_month].'</td>';
+                // } else if($att_rate_ary[$idx_month] == 100) {
+                //     $ret = $ret.'<td class="w3-green">'.$att_rate_ary[$idx_month].'</td>';
+                // } else {
+                //     $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
+                // }
+                $ret = $ret.'<td'.getBGColorHTML($att_rate_ary[$idx_month]).'>'.$att_rate_ary[$idx_month].'</td>';
             }
             $avg_att_rate = (int)(array_sum($att_rate_ary)/(int)date('n', strtotime($date.' -1 months')));
             $ret =  $ret.'<td'.getBGColorHTML($avg_att_rate).'>'.$avg_att_rate.'%</td>';
