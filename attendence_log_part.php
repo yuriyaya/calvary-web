@@ -26,21 +26,40 @@
                 if(isset($_GET['login']) && ($_GET['login']=='error')) {
                     $status_msg_code = '5000';
                 } else {
+
                     include_once "./inc/display_attendence.php";
                     include_once "./inc/func_global.php";
                     $part_number = $_GET['part_num'];
                     $id = $_GET['id'];
+
+                    $part_id=null;
+                    if(isset($_SESSION['u_id'])){
+                        $part_id=$_SESSION['u_id'];
+                    }
+
+                    switch($part_id) {
+                        case 'sopa':
+                        case 'sopb':
+                        case 'sopbp':
+                        case 'altoa':
+                        case 'altob':
+                        case 'tenor':
+                        case 'bass':
+                            $status_msg_code = '';
+                            break;
+                        default:
+                            $status_msg_code = '5002';
+                            break;
+                    }
+                    if(!empty($status_msg_code)) {
+                        echo displayAlert($status_msg_code);
+                        $status_msg_code = '';
+                    } else {
             ?>
             <div class="w3-panel w3-blue-grey">
                 <h3><?php echo returnPartName($part_number); ?></h3>
                 <p><?php echo displayTitleDescription($id); ?></p>
             </div>
-            <?php
-                    if(!empty($status_msg_code)) {
-                        echo displayAlert($status_msg_code);
-                        $status_msg_code = '';
-                    }
-            ?>
             <form class="att_log_part_search" action="./attendence_log_part_search.php" method="POST">
                 <table style="border:0px">
                     <tr>
@@ -54,20 +73,19 @@
                 </table>
             </form>
             <?php
-                    $date = checkAttLogDayById($id);
-                    if(!empty($date)) {
-                        //TODO get id-state array
+                        $date = checkAttLogDayById($id);
+                        if(!empty($date)) {
             ?>
             <form class="att_log_part" action="./inc/attendence_log_part_update.php" method="POST">
                 <?php
-                    //TODO for each for sentence, create one row of attendence log
-                        echo displayAttendenceForm($part_number, $date);
+                            echo displayAttendenceForm($part_number, $date);
                 ?>
                 <input type="hidden" name="att_part" value="<?php echo $part_number ?>">
                 <input type="hidden" name="att_date" value="<?php echo $date ?>">
                 <button type="submit" name="update_submit" class="w3-button w3-green" id="submit_button">출석 입력</button>
             </form>
             <?php
+                        }
                     }
                 }
             ?>
