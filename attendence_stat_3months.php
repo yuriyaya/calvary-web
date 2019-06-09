@@ -59,7 +59,7 @@
                 if(isset($_GET['login']) && ($_GET['login']=='error')) {
                     $status_msg_code = '5000';
                 }
-                include_once "./inc/attendence_stat_menu.php";
+                
                 if(isset($_GET['part_num'])){
                     $part_number = $_GET['part_num'];
                 } else {
@@ -74,6 +74,7 @@
             ?>
             <?php
                 if(!empty($part_number)) {
+                    include_once "./inc/attendence_stat_menu.php";
             ?>
             <form class="att_stat_update" action="./inc/attendence_stat_update.php" method="POST">
                 <?php
