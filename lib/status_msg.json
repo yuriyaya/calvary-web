@@ -17,7 +17,7 @@
     "5003":{
         "level" : "red",
         "title":"선택한 기능 지원 불가 계정",
-        "description":"임원단 혹은 admin 아이디로 로그인이 필요합니다."
+        "description":"임역원 혹은 admin 아이디로 로그인이 필요합니다."
     },
     "9010":{
         "level" : "red",

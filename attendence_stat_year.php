@@ -64,17 +64,16 @@
                 } else {
                     $date = date("Y-m").'-01';
                 }
-                include_once "./inc/attendence_stat_menu.php";
             ?>
             <?php
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
-                }
-            ?>
-            <?php
-                if(!empty($part_number)) {
-                    echo displayAttendenceYearForm($part_number, $date);
+                } else {
+                    include_once "./inc/attendence_stat_menu.php";
+                    if(!empty($part_number)) {
+                        echo displayAttendenceYearForm($part_number, $date);
+                    }
                 }
             ?>
         </div>

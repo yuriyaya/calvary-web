@@ -587,7 +587,7 @@
         $att_list_pause = $att_list_ary[5];
 
         //display attendence check form
-        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table">'.displayAttStatChangeFormHeader($date);
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:500px">'.displayAttStatChangeFormHeader($date);
         
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_staff, '파트장');
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_normal);

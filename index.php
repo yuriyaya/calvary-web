@@ -29,6 +29,8 @@
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
+                } else {
+                    echo "<a href='mailto:yncalvary@gmail.com' class='w3-button w3-blue'>관리자 문의</a>";
                 }
             ?>
         </div>
