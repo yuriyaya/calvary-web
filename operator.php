@@ -31,7 +31,7 @@
                         $status_msg_code = '5003';
                     }
                 } else {
-                    $status_msg_code = '5001';
+                    $status_msg_code = '5003';
                 }
                 //ALERT!
                 if(!empty($status_msg_code)) {

@@ -31,7 +31,7 @@
                         include_once "./inc/attendence_stat_menu.php";
                     }
                 } else {
-                    $status_msg_code = '5001';
+                    $status_msg_code = '5002';
                 }
                 //ALERT!
                 if(!empty($status_msg_code)) {
