@@ -103,6 +103,7 @@
     function displayAttendenceForm($part, $date) {
 
         $att_check_form = '';
+        $temp_ary = array();
 
         $att_list_ary = getMemberSNStateFromDB($part, $date);
         $att_list_staff = $att_list_ary[0];
@@ -111,16 +112,49 @@
         $att_list_temp = $att_list_ary[3];
         $att_list_special = $att_list_ary[4];
         $att_list_pause = $att_list_ary[5];
+        $stat_normal = count($att_list_staff) + count($att_list_normal);
+        $stat_newbie = count($att_list_newbie);
+        $stat_others = count($att_list_temp) + count($att_list_special);
+
+        $stat_att_normal = 0;
+        $stat_att_newbie = 0;
+        $stat_att_others = 0;
 
         //display attendence check form
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:500px;">'.dispalyAttLogHeader($date);
 
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_staff, '파트장');
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_normal);
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_newbie);
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_temp);
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_special);
-        $att_check_form=$att_check_form.getAttOneRowBind($part, $date, $att_list_pause);
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_staff, '파트장');
+        $stat_att_normal = $stat_att_normal + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_normal);
+        $stat_att_normal = $stat_att_normal + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_newbie);
+        $stat_att_newbie = $stat_att_newbie + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_temp);
+        $stat_att_others = $stat_att_others + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_special);
+        $stat_att_others = $stat_att_others + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_pause);
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $stat_att_rate_all = (int)((($stat_att_normal+$stat_att_newbie+$stat_att_others)/($stat_normal+$stat_newbie+$stat_others))*100);
+        $att_check_form=$att_check_form.'<tr><td>총대원('.($stat_normal+$stat_newbie+$stat_others).')</td><td>'.($stat_att_normal+$stat_att_newbie+$stat_att_others).'</td><td>'.$stat_att_rate_all.'%</td><td></td><td></td><td></td></tr>';
+        $att_check_form=$att_check_form.'<tr><td>정대원('.($stat_normal).')</td><td>'.$stat_att_normal.'</td><td>'.(int)(($stat_att_normal/$stat_normal)*100).'%</td><td></td><td></td><td></td></tr>';
+        if($stat_newbie == 0) {
+            $stat_att_rate_newbie = 0;
+        } else {
+            $stat_att_rate_newbie = (int)(($stat_att_newbie/$stat_newbie)*100);
+        }
+        $att_check_form=$att_check_form.'<tr><td>신입대원('.$stat_newbie.')</td><td>'.($stat_att_newbie).'</td><td>'.$stat_att_rate_newbie.'%</td><td></td><td></td><td></td></tr>';
 
         $att_check_form=$att_check_form.'</table>';
 
@@ -129,6 +163,8 @@
 
     function getAttOneRowBind($part_num, $att_date, $mem_list, $staff_state=null) {
         $ret = '';
+        $count_att = 0;
+        $ret_ary = array();
 
         $month_start = date('Y-m', strtotime($att_date.' -3 months')).'-01';
         $month_end = date('Y-m-t', strtotime($att_date.' -1 months'));
@@ -158,6 +194,7 @@
                 while($row = $stmt->fetch()) {
                     if($row['attend_value']==10) {
                         $checked = ' checked';
+                        $count_att = $count_att + 1;
                     }
                 }
             }
@@ -218,7 +255,10 @@
 
         }
 
-        return $ret;
+        array_push($ret_ary, $count_att);
+        array_push($ret_ary, $ret);
+
+        return $ret_ary;
     }
 
     function getAttDBName($part_num) {
