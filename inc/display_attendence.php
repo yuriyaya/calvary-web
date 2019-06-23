@@ -114,7 +114,7 @@
         $att_list_pause = $att_list_ary[5];
         $stat_normal = count($att_list_staff) + count($att_list_normal);
         $stat_newbie = count($att_list_newbie);
-        $stat_others = count($att_list_temp) + count($att_list_special);
+        $stat_others = count($att_list_temp) + count($att_list_special) + count($att_list_pause);
 
         $stat_att_normal = 0;
         $stat_att_newbie = 0;
@@ -144,6 +144,7 @@
         $att_check_form=$att_check_form.$temp_ary[1];
 
         $temp_ary = getAttOneRowBind($part, $date, $att_list_pause);
+        $stat_att_others = $stat_att_others + $temp_ary[0];
         $att_check_form=$att_check_form.$temp_ary[1];
 
         $stat_att_rate_all = (int)((($stat_att_normal+$stat_att_newbie+$stat_att_others)/($stat_normal+$stat_newbie+$stat_others))*100);
