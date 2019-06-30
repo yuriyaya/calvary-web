@@ -145,7 +145,7 @@
         $bass_att_cnt = 0;
         $newbie_att_cnt = 0;
 
-        for($date=1; $date<$last_date_of_month; $date++) {
+        for($date=1; $date<=$last_date_of_month; $date++) {
 
             if($date<10) {
                 $str_date = '0'.$date;
