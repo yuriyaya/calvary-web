@@ -222,4 +222,36 @@
 
         return $ret_db;
     }
+
+    function getDay($day_number) {
+        $ret = '';
+
+        switch($day_number){
+            case 0:
+                $ret = "일";
+                break;
+            case 1:
+                $ret = "월";
+                break;
+            case 2:
+                $ret = "화";
+                break;
+            case 3:
+                $ret = "수";
+                break;
+            case 4:
+                $ret = "목";
+                break;
+            case 5:
+                $ret = "금";
+                break;
+            case 6:
+                $ret = "토";
+                break;
+            default:
+                break;
+        }
+
+        return $ret;
+    }
 ?>
