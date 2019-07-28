@@ -21,22 +21,26 @@
 
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
             <?php
                 include_once "./inc/func_global.php";
-                if(isset($_GET['login']) && ($_GET['login']=='error')) {
-                    $status_msg_code = '5000';
+                if(isset($_SESSION['u_id'])) {
+                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
+                        include_once "./inc/operator_menu_member.php";
+                    } else {
+                        $status_msg_code = '5003';
+                    }
+                } else {
+                    $status_msg_code = '5003';
                 }
+                //ALERT!
                 if(!empty($status_msg_code)) {
                     echo displayAlert($status_msg_code);
                     $status_msg_code = '';
-                } else {
-                    echo '<div class="w3-panel w3-yellow w3-topbar w3-bottombar w3-border-amber w3-container w3-center"><h3>영락교회 갈보리 찬양대</h3></div>';
-                    echo "<a href='mailto:yncalvary@gmail.com' class='w3-button w3-blue'>관리자 문의</a><br>";
-                    echo '<div class="w3-container w3-right" style="font-size:8px">v0.5.20190728.Yuls</div>';
                 }
             ?>
+
         </div>
-        
         <!-- !END PAGE CONTENT! -->
 
         <script type="text/javascript" src="./js/menu.js"></script>

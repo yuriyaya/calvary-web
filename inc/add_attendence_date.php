@@ -99,16 +99,18 @@
         } else {
             try {
                 include_once 'dbconn.php';
+
                 //search attendence date
                 $query = "SELECT * FROM attendence_date WHERE att_date >='".$att_date_start."' AND att_date <='".$att_date_end."' ORDER BY att_date DESC";
                 // echo $query;
                 $stmt = $conn->prepare($query);
                 $stmt->execute();
                 $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                $search_result_info='<table class="w3-table-all w3-hoverable"><tr><th>출결일</th><th>설명</th></tr>';
+                $search_result_info='<table class="w3-table-all w3-hoverable"><tr><th>출결일</th><th>요일</th><th>설명</th></tr>';
                 while($row = $stmt->fetch()) {
                     $search_result_info=$search_result_info.'<tr>';
                     $search_result_info=$search_result_info.'<td>'.$row['att_date'].'</td>';
+                    $search_result_info=$search_result_info.'<td>'.getDay($row['type']).'</td>';
                     $search_result_info=$search_result_info.'<td>'.$row['details'].'</td>';
                     $search_result_info=$search_result_info.'</tr>';
                 }

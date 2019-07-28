@@ -28,7 +28,7 @@
                 if(isset($_SESSION['u_id'])) {
             
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
-                        include_once "./inc/operator_menu.php";
+                        include_once "./inc/operator_menu_member.php";
                         include_once "./inc/display_attendence.php";
                         include_once "./inc/operator_newbie_att_rate.php";
                         

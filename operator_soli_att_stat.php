@@ -28,7 +28,7 @@
                 if(isset($_SESSION['u_id'])) {
             
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
-                        include_once "./inc/operator_menu.php";
+                        include_once "./inc/operator_menu_member.php";
                         
                         if(isset($_POST['soli_att_submit'])) {
                             $date_start = $_POST['att_date_start'];
@@ -49,7 +49,7 @@
                             $stmt->execute();
                             $stmt->setFetchMode(PDO::FETCH_ASSOC);
                             $member_id = 0;
-                            $search_result_info = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th><th>출석률</th></tr>';
+                            $search_result_info = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th><th>출석률</th><th>상세내역</th></tr>';
                             while($row = $stmt->fetch()) {
 
                                 $member_id = $row['id'];
@@ -70,9 +70,9 @@
                                     $stmt_att->setFetchMode(PDO::FETCH_ASSOC);
                                     while($row = $stmt_att->fetch()) {
                                         $part_num = (int)($member_id/10000);
-                                        $att_rate = (int)($row['sum(attend_value)']/10);
-                                        $att_rate = round(($att_rate/$att_date_cnt)*100);
-                                        $search_result_info = $search_result_info.'<tr><td>'.returnPartName($part_num).'</td><td>'.$member_name.'</td><td>'.$att_rate.'%</td></tr>';
+                                        $att_date = (int)($row['sum(attend_value)']/10);
+                                        $att_rate = round(($att_date/$att_date_cnt)*100);
+                                        $search_result_info = $search_result_info.'<tr><td>'.returnPartName($part_num).'</td><td>'.$member_name.'</td><td>'.$att_rate.'%</td><td>'.$att_date.'/'.$att_date_cnt.'</td></tr>';
                                     }
                                 }
                                 

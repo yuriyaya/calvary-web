@@ -28,7 +28,8 @@
     <a href="./index.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home"></i>  홈페이지</a>
     <a href="./attendence_log.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  파트출석입력</a>
     <a href="./attendence_stat.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  파트출석현황</a>
-    <a href="./operator.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bar-chart"></i>  출석통계</a>
+    <a href="./operator.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bar-chart"></i>  임역원-출석통계</a>
+    <a href="./operator_member.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-plus"></i>  임역원-대원현황</a>
     <a href="./admin.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog"></i>  관리자</a><br><br>
 </div>
 </nav>

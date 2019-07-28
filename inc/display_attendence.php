@@ -262,38 +262,6 @@
         return $ret_ary;
     }
 
-    function getAttDBName($part_num) {
-        $ret_db = '';
-
-        switch($part_num){
-            case 1:
-                $ret_db = "attendence_sopa";
-                break;
-            case 2:
-                $ret_db = "attendence_sopb";
-                break;
-            case 3:
-                $ret_db = "attendence_sopbp";
-                break;
-            case 4:
-                $ret_db = "attendence_altoa";
-                break;
-            case 5:
-                $ret_db = "attendence_altob";
-                break;
-            case 6:
-                $ret_db = "attendence_tenor";
-                break;
-            case 7:
-                $ret_db = "attendence_bass";
-                break;
-            default:
-                break;
-        }
-
-        return $ret_db;
-    }
-
     function getMemberSNStateFromDB($part, $date) {
 
         $ret_ary = array();
@@ -411,7 +379,7 @@
         $date_list_ary = getAttLogDateArray($date);
 
         //display attendence check form
-        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogMonthlyHeader($date);
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogMonthlyHeader($date, $date_list_ary);
 
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_staff, $date_list_ary, '파트장');
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_normal, $date_list_ary);
@@ -425,27 +393,42 @@
         return $att_check_form;
     }
 
-    function dispalyAttLogMonthlyHeader($date) {
+    function dispalyAttLogMonthlyHeader($date, $att_log_ary) {
         $ret_str = '<tr><th>이름</th><th>상태</th>';
 
-        $att_log_ary = getAttLogDateArray($date);
+        $cnt_sat = 0;
+        $cnt_sun = 0;
+        $cnt_other = 0;
 
         $ary_temp = $att_log_ary[0]; //saturday
         for($idx=0; $idx<count($ary_temp); $idx++) {
             $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
         }
+        $cnt_sat = count($ary_temp);
 
         $ary_temp = $att_log_ary[1]; //sunday
         for($idx=0; $idx<count($ary_temp); $idx++) {
             $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
         }
+        $cnt_sun = count($ary_temp);
 
         $ary_temp = $att_log_ary[2]; //other day
         for($idx=0; $idx<count($ary_temp); $idx++) {
             $ret_str = $ret_str.'<th>'.date('d', strtotime($ary_temp[$idx])).'</th>';
         }
+        $cnt_other = count($ary_temp);
 
-        $ret_str = $ret_str.'<th>토</th><th>일</th><th>합계</th><th>%</th></tr>';
+        if($cnt_sat > 0) {
+            $ret_str = $ret_str.'<th>토</th>';
+        }
+        if($cnt_sun > 0) {
+            $ret_str = $ret_str.'<th>일</th>';
+        }
+        if($cnt_other > 0) {
+            $ret_str = $ret_str.'<th>기타</th>';
+        }
+        
+        $ret_str = $ret_str.'<th>합계</th><th>%</th></tr>';
 
         return $ret_str;
     }

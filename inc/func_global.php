@@ -191,6 +191,38 @@
         return $ret_db;
     }
 
+    function getAttDBName($part_num) {
+        $ret_db = '';
+
+        switch($part_num){
+            case 1:
+                $ret_db = "attendence_sopa";
+                break;
+            case 2:
+                $ret_db = "attendence_sopb";
+                break;
+            case 3:
+                $ret_db = "attendence_sopbp";
+                break;
+            case 4:
+                $ret_db = "attendence_altoa";
+                break;
+            case 5:
+                $ret_db = "attendence_altob";
+                break;
+            case 6:
+                $ret_db = "attendence_tenor";
+                break;
+            case 7:
+                $ret_db = "attendence_bass";
+                break;
+            default:
+                break;
+        }
+
+        return $ret_db;
+    }
+
     function getMonthlyPartDBNameByPartNumber($part_number) {
         $ret_db = '';
 
@@ -221,5 +253,37 @@
         }
 
         return $ret_db;
+    }
+
+    function getDay($day_number) {
+        $ret = '';
+
+        switch($day_number){
+            case 0:
+                $ret = "일";
+                break;
+            case 1:
+                $ret = "월";
+                break;
+            case 2:
+                $ret = "화";
+                break;
+            case 3:
+                $ret = "수";
+                break;
+            case 4:
+                $ret = "목";
+                break;
+            case 5:
+                $ret = "금";
+                break;
+            case 6:
+                $ret = "토";
+                break;
+            default:
+                break;
+        }
+
+        return $ret;
     }
 ?>
