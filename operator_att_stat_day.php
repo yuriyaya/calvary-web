@@ -34,36 +34,34 @@
                         if(isset($_POST['att_stat_day_search'])) {
                             $att_stat_day = $_POST['att_stat_day'];
 
-                            $date_start = date('Y-m', strtotime($att_stat_day)).'-01';
-                            $date_end = date('Y-m-t', strtotime($att_stat_day));
-
                             include './inc/dbconn.php';
 
                             $result_html = ''; //to be implemented
 
-                            // $result_html = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>이름</th></tr>';
+                            $result_html = '<table class="w3-table-all w3-hoverable"><tr><th>파트</th><th>현황</th></tr>';
+                            $total_att = 0;
 
-                            // for($part_num=1; $part_num<8; $part_num++) {
-                            //     $query = "SELECT mi.name FROM ".getMonthlyPartDBNameByPartNumber($part_num)." AS att LEFT JOIN member_info AS mi ON att.id=mi.id WHERE att.date>='".$date_start."' AND att.date<='".$date_end."' AND att.att_month_rate=100;";
-                            //     $stmt = $conn->prepare($query);
-                            //     $stmt->execute();
-                            //     $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                            //     $result_html = $result_html.'<tr><td style="width:150px">'.returnPartName($part_num).'</td>';
-                            //     $record_cnt = 0;
-                            //     $name_list = '';
-                            //     while($row = $stmt->fetch()) {
-                            //         if($record_cnt == 0) {
-                            //             $name_list = $row['name'];
-                            //             $record_cnt = $record_cnt + 1;
-                            //         } else {
-                            //             $name_list = $name_list.', '.$row['name'];
-                            //         }
-                            //     }
-                            //     $result_html = $result_html.'<td>'.$name_list.'</td></tr>';
-                            //     $name_list = '';
-                            // }
+                            for($part_num=1; $part_num<8; $part_num++) {
+                                $query = "SELECT sum(attend_value) FROM ".getAttDBName($part_num)." WHERE date='".$att_stat_day."';";
+                                // echo $query.'<br>';
+                                $stmt = $conn->prepare($query);
+                                $stmt->execute();
+                                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                                $result_html = $result_html.'<tr><td style="width:150px">'.returnPartName($part_num).'</td>';
+                                $att_date = 0;
+                                while($row = $stmt->fetch()) {
+                                    $att_date = (int)($row['sum(attend_value)']/10);
+                                }
+                                if($att_date == 0) {
+                                    $result_html = $result_html.'<td>미입력</td></tr>';
+                                } else {
+                                    $result_html = $result_html.'<td>'.$att_date.'</td></tr>';
+                                    $total_att = $total_att + $att_date;
+                                }
+                            }
 
-                            // $result_html = $result_html.'</table>';
+                            $result_html = $result_html.'<tr><td>합계</td><td>'.$total_att.'</td></tr>';
+                            $result_html = $result_html.'</table>';
                         }
                     } else {
                         $status_msg_code = '5003';
@@ -81,7 +79,7 @@
                 <form class="operator_att_stat_day_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
-                            <td>조회 일자 : </td><td><input type="date" name="att_stat_day" value="<?php if(empty($att_stat_day)){echo date("Y-m-d", strtotime("-1 months"));} else {echo $att_stat_day;} ?>"></td>
+                            <td>조회 일자 : </td><td><input type="date" name="att_stat_day" value="<?php if(empty($att_stat_day)){echo date("Y-m-d");} else {echo $att_stat_day;} ?>"></td>
                         </tr>
                         <tr>
                             <td></td>
