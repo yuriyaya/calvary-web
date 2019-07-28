@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/operator.css">
     <style>
         * {font-family: "Raleway", sans-serif}
     </style>
@@ -26,17 +25,13 @@
             <?php
                 include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
-            
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
                         include_once "./inc/operator_menu_member.php";
-                        include_once "./inc/display_attendence.php";
-                        include_once "./inc/operator_newbie_att_rate.php";
-                        
                     } else {
                         $status_msg_code = '5003';
                     }
                 } else {
-                    $status_msg_code = '5001';
+                    $status_msg_code = '5003';
                 }
                 //ALERT!
                 if(!empty($status_msg_code)) {
@@ -44,9 +39,7 @@
                     $status_msg_code = '';
                 }
             ?>
-            <div class="operator_newbie">
-                <?php if(!empty($result_html)){echo $result_html;} ?>
-            </div>
+
         </div>
         <!-- !END PAGE CONTENT! -->
 

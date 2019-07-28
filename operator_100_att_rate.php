@@ -28,7 +28,7 @@
                 if(isset($_SESSION['u_id'])) {
             
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
-                        include_once "./inc/operator_menu.php";
+                        include_once "./inc/operator_menu_member.php";
                         include_once "./inc/display_attendence.php";
 
                         if(isset($_POST['att_100_member_search'])) {
@@ -48,6 +48,7 @@
                                 $stmt->setFetchMode(PDO::FETCH_ASSOC);
                                 $result_html = $result_html.'<tr><td style="width:150px">'.returnPartName($part_num).'</td>';
                                 $record_cnt = 0;
+                                $name_list = '';
                                 while($row = $stmt->fetch()) {
                                     if($record_cnt == 0) {
                                         $name_list = $row['name'];
