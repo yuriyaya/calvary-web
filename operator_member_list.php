@@ -90,7 +90,7 @@
                                     $cond_str = ' WHERE last_state < 6 ';
                                     break;
                                 case 1:
-                                    $cond_str = ' WHERE last_state = 5 ';
+                                    $cond_str = ' WHERE last_state = 6 ';
                                     break;
                                 case 3:
                                     $cond_str = ' WHERE last_state > 6 ';
