@@ -91,9 +91,10 @@
     function dispalyAttLogHeader($date) {
         $ret_str = '';
 
-        $one_month = strtotime($date.' -1 months');
-        $two_month = strtotime($date.' -2 months');
-        $three_month = strtotime($date.' -3 months');
+        $date_timestamp = strtotime($date);
+        $one_month = strtotime(date('Y-m-01', $date_timestamp).' -1 months');
+        $two_month = strtotime(date('Y-m-01', $date_timestamp).' -2 months');
+        $three_month = strtotime(date('Y-m-01', $date_timestamp).' -3 months');
 
         $ret_str = '<tr><th>이름</th><th>상태</th><th>출석</th><th>'.date('n', $one_month).'월</th><th>'.date('n', $two_month).'월</th><th>'.date('n', $three_month).'월</th></tr>';
 
@@ -167,8 +168,11 @@
         $count_att = 0;
         $ret_ary = array();
 
-        $month_start = date('Y-m', strtotime($att_date.' -3 months')).'-01';
-        $month_end = date('Y-m-t', strtotime($att_date.' -1 months'));
+        $att_timestamp = strtotime($att_date);
+        $one_month = strtotime(date('Y-m-01', $att_timestamp).' -1 months');
+        $three_month = strtotime(date('Y-m-01', $att_timestamp).' -3 months');
+        $month_start = date('Y-m-d', $three_month);
+        $month_end = date('Y-m-t', $one_month).'<br>';
 
         include 'dbconn.php';
         for($idx=0; $idx<count($mem_list); $idx++) {

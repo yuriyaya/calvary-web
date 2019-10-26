@@ -4,4 +4,5 @@
     <a href="operator_100_att_rate.php" class="w3-bar-item w3-button w3-mobile">월별개근대원</a>
     <a href="operator_newbie.php" class="w3-bar-item w3-button w3-mobile">신입대원현황</a>
     <a href="operator_pause.php" class="w3-bar-item w3-button w3-mobile">휴식대원현황</a>
+    <a href="operator_member_list.php" class="w3-bar-item w3-button w3-mobile">대원명단</a>
 </div>
