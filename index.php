@@ -32,7 +32,7 @@
                 } else {
                     echo '<div class="w3-panel w3-yellow w3-topbar w3-bottombar w3-border-amber w3-container w3-center"><h3>영락교회 갈보리 찬양대</h3></div>';
                     echo "<a href='mailto:yncalvary@gmail.com' class='w3-button w3-blue'>관리자 문의</a><br>";
-                    echo '<div class="w3-container w3-right" style="font-size:8px">v0.5.20190728.Yuls</div>';
+                    echo '<div class="w3-container w3-right" style="font-size:8px">v0.6.20191026.Yuls</div>';
                 }
             ?>
         </div>
