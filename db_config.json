@@ -1,8 +1,0 @@
-{
-    "mysql":{
-        "servername" : "localhost",
-        "username":"root",
-        "password":"password",
-        "dbname":"calvary"
-    }
-}
