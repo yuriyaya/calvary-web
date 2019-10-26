@@ -27,15 +27,27 @@
                 if(isset($_SESSION['u_id'])) {
                     if($_SESSION['u_id'] == 'admin') {
                         include_once "./inc/admin_menu.php";
+                        include_once "./inc/func_global.php";
+                        //error
+                        if(isset($_GET['register'])) {
+                            $status_msg_code = $_GET['register'];
+                            if(!empty($status_msg_code)) {
+                                echo displayAlert($status_msg_code);
+                                $status_msg_code = '';
+                            }
+                        }
             ?>
             <div class="add_user">
                 <form class="add_user_form" action="./inc/register.php" method="POST">
                     <table style="border:0px;">
                         <tr>
-                            <td>아이디 : </td><td><input type="text" name="user_id" plasceholder="ID"></td>
+                            <td>아이디 : </td><td><input type="text" name="user_id"></td>
                         </tr>
                         <tr>
-                            <td>비밀번호 : </td><td><input type="password" name="user_pw" plasceholder="Password"></td>
+                            <td>기존 비밀번호 : </td><td><input type="password" name="user_pw_before"></td>
+                        </tr>
+                        <tr>
+                            <td>변경 비밀번호 : </td><td><input type="password" name="user_pw"></td>
                         </tr>
                         <tr>
                             <td></td><td><button type="submit" name="submit" class="w3-button w3-green">등록</button></td>
