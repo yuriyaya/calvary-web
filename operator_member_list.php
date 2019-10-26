@@ -90,7 +90,7 @@
                                     $cond_str = ' WHERE last_state < 6 ';
                                     break;
                                 case 1:
-                                    $cond_str = ' WHERE last_state = 5 ';
+                                    $cond_str = ' WHERE last_state = 6 ';
                                     break;
                                 case 3:
                                     $cond_str = ' WHERE last_state > 6 ';
@@ -119,7 +119,7 @@
                                 if($cond_state) {
                                     $result_html = $result_html.'<td>'.getMemberStateString($row['last_state']).'</td>';
                                 }
-                                if($cond_state) {
+                                if($cond_church_staff) {
                                     $result_html = $result_html.'<td>'.returnChurchStaffName($row['church_staff']).'</td>';
                                 }
                                 $result_html = $result_html.'</tr>';
