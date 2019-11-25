@@ -595,9 +595,9 @@
             $ret = $ret.'<td>'.$att_val_sum.'</td>';
             $att_rate = (int)(($att_val_sum/array_sum($day_total_ary))*100);
             $ret =  $ret.'<td'.getBGColorHTML($att_rate).'><input type="hidden" name="att_month_rate[]" value="'.$att_rate.'">'.$att_rate.'%</td>';
+            $ret = $ret.'</tr>';
             
         }
-        $ret = $ret.'</tr>';
 
         return $ret;
     }
@@ -897,9 +897,126 @@
             }
             $avg_att_rate = (int)(array_sum($att_rate_ary)/(int)date('n', strtotime($date.' -1 months')));
             $ret =  $ret.'<td'.getBGColorHTML($avg_att_rate).'>'.$avg_att_rate.'%</td>';
+            $ret = $ret.'</tr>';
             
         }
-        $ret = $ret.'</tr>';
+
+        return $ret;
+    }
+
+    function displayAttendence100Rate($part, $date) {
+
+        $att_check_form = '';
+
+        $last_date = date('Y-m-d', strtotime($date));
+
+        $att_list_ary = getMemberSNStateFromDB($part, $last_date);
+        $att_list_staff = $att_list_ary[0];
+        $att_list_normal = $att_list_ary[1];
+        $att_list_newbie = $att_list_ary[2];
+        $att_list_temp = $att_list_ary[3];
+        $att_list_special = $att_list_ary[4];
+        $att_list_pause = $att_list_ary[5];
+
+        $date_total_count = (int)getAttLogDateCountNumber($date);
+        // echo $date_total_count.'<br>';
+
+        //display attendence check form
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px"><tr><th>이름</th><th>상태</th><th>결석일</th></tr>';
+
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_staff, $date_total_count, '파트장');
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_normal, $date_total_count);
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_newbie, $date_total_count);
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_temp, $date_total_count);
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_special, $date_total_count);
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_pause, $date_total_count);
+
+        $att_check_form=$att_check_form.'</table>';
+
+        return $att_check_form;
+    }
+
+    function getAttLogDateCountNumber($date) {
+        $ret = 0;
+
+        $date_start = date('Y', strtotime($date)).'-01-01';
+        $date_end = date('Y-m-d', strtotime($date));
+
+        include 'dbconn.php';
+        $query = "SELECT count(att_date) FROM attendence_date WHERE att_date >='".$date_start."' AND att_date <='".$date_end."';";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        while($row = $stmt->fetch()) {
+            $date_count = $row['count(att_date)'];
+        }
+
+        $ret = $date_count;
+
+        return $ret;
+    }
+
+    function getAtt100RateOneRowBind($part_num, $date, $mem_list, $att_date_total, $staff_state=null) {
+        $ret = '';
+
+        $date_start = date('Y', strtotime($date)).'-01-01'; //first day of year
+        $date_end = date('Y-m-d', strtotime($date)); //input date
+        // echo $date_start.'<br>';
+        // echo $date_end.'<br>';
+
+        include 'dbconn.php';
+
+        // echo $part_num.'<br>';
+        // echo getAttDBName($part_num).'<br>';
+
+        for($idx=0; $idx<count($mem_list); $idx++) {
+
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $ret = $ret.'<tr>';
+            $ret =  $ret.'<td><input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'</td>';
+            $ret =  $ret.'<td>'.getAttendenceFormMemberState($mem_state, $staff_state).'</td>';
+
+            $query = "SELECT sum(attend_value) FROM ".getAttDBName($part_num)." WHERE date>=:in1 AND date<=:in2 AND id=:in3;";
+            // echo $query.'<br>';
+            // echo $date_start.'<br>';
+            // echo $date_end.'<br>';
+            // echo $mem_id.'<br>';
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':in1', $in1);
+            $stmt->bindParam(':in2', $in2);
+            $stmt->bindParam(':in3', $in3);
+            $in1 = $date_start;
+            $in2 = $date_end;
+            $in3 = $mem_id;
+            $stmt->execute();
+            $num_of_rows = $stmt->rowCount();
+
+            if($num_of_rows > 0) {
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt->fetch()) {
+                    $att_value = (int)$row['sum(attend_value)'];
+                    if($att_value > 0) {
+                        $att_value = $att_value/10;
+                    }
+                }
+            }
+
+            // echo $att_date_total.'<br>';
+            // echo $att_value.'<br>';
+            $value = (int)$att_date_total-(int)$att_value;
+            if($value < 4) {
+                $color_tag = ' class="w3-green"';
+            } else {
+                $color_tag = '';
+            }
+            $ret =  $ret.'<td'.$color_tag.'>'.$value.'</td>';
+            $ret = $ret.'</tr>';
+            
+        }
 
         return $ret;
     }
