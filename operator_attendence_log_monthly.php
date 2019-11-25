@@ -85,15 +85,7 @@
                 </form>
                 <?php
                     if($success) {
-                ?>
-                <form class="att_log_part" action="./inc/attendence_log_part_month_update.php" method="POST">
-                    <?php
                         echo displayAttendenceMonthlyForm($part_number, $date);
-                    ?>
-                    <input type="hidden" name="att_part" value="<?php echo $part_number ?>">
-                    <input type="hidden" name="att_date" value="<?php echo $date ?>">
-                </form>
-                <?php
                     }
                     $success = false;
                 ?>
