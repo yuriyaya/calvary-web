@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/admin.css">
+    <link rel="stylesheet" href="./css/operator.css">
     <link rel="stylesheet" href="./css/attendence_log.css">
     <style>
         * {font-family: "Raleway", sans-serif}
@@ -57,8 +57,8 @@
                     $status_msg_code = '';
                 }
             ?>
-            <div class="add_attendence_log_month">
-                <form class="add_attendence_log_month_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <div class="member_continue_year">
+                <form class="member_continue_year_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
                             <td>파트 : </td><td><select class="w3-select w3-border" id="part" name="part_num">
@@ -85,9 +85,9 @@
                 </form>
                 <?php
                     if($success) {
-                        echo '근속일 계산은 정대원 승급일 기준이며 제적 후 재입대시에는 재입대일 기준으로 계산됩니다.<br>';
-                        echo '정대원 인정 이후 휴식할 경우 근속기간에서 제외 됩니다. 즉, 근속일이 10년이 되었더라도 휴식일이 길면 10년 근속자로 인정하지 않습니다.<br>';
-                        echo '근속의 경우 현재 정대원만 표시되며, 조회 기준일 당시 신입/휴식 상태일 경우 근속자로 인정되지 않습니다.<br>';
+                        echo ' - 근속일 계산은 정대원 승급일 기준이며 제적 후 재입대시에는 재입대일 기준으로 계산됩니다.<br>';
+                        echo ' - 정대원 인정 이후 휴식할 경우 근속기간에서 제외 됩니다. 즉, 근속일이 10년이 되었더라도 휴식일이 길면 10년 근속자로 인정하지 않습니다.<br>';
+                        echo ' - 근속의 경우 현재 정대원만 표시되며, 조회 기준일 당시 신입/휴식 상태일 경우 근속자로 인정되지 않습니다.<br>';
                         echo displayMemberContinueYear($part_number, $date);
                     }
                     $success = false;
