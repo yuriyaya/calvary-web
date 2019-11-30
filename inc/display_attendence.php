@@ -1021,4 +1021,92 @@
         return $ret;
     }
 
+    function displayMemberContinueYear($part, $date) {
+
+        $att_check_form = '';
+
+        $last_date = date('Y-m-d', strtotime($date));
+
+        $att_list_ary = getMemberSNStateFromDB($part, $last_date);
+        $att_list_staff = $att_list_ary[0];
+        $att_list_normal = $att_list_ary[1];
+
+        //display attendence check form
+        $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px"><tr><th>이름</th><th>상태</th><th>근속일</th><th>이력</th></tr>';
+
+        $att_check_form=$att_check_form.getMemberContinueYearOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_check_form=$att_check_form.getMemberContinueYearOneRowBind($part, $date, $att_list_normal);
+
+        $att_check_form=$att_check_form.'</table>';
+
+        return $att_check_form;
+    }
+
+    function getMemberContinueYearOneRowBind($part_num, $date, $mem_list, $staff_state=null) {
+        $ret = '';
+
+        $date_end = date('Y-m-d', strtotime($date)); //input date
+        // echo $date_end.'<br>';
+
+        include 'dbconn.php';
+
+        $member_last_normal_date = null;
+        $member_continue_diff = 0;
+        $exit_loop_flag = false;
+
+        for($idx=0; $idx<count($mem_list); $idx++) {
+
+            $one_member = $mem_list[$idx];
+            $mem_id = $one_member[0];
+            $mem_name = $one_member[1];
+            $mem_state = $one_member[2];
+
+            $ret = $ret.'<tr>';
+            $ret =  $ret.'<td><input type="hidden" name="mem_id[]" value="'.$mem_id.'">'.$mem_name.'</td>';
+            $ret =  $ret.'<td>'.getAttendenceFormMemberState($mem_state, $staff_state).'</td>';
+
+            $query = "SELECT * FROM member_state WHERE id=:in1 ORDER BY state_update_date DESC;";
+            // echo $query.'<br>';
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':in1', $in1);
+            $in1 = $mem_id;
+            $stmt->execute();
+            $num_of_rows = $stmt->rowCount();
+
+            $state_change_history = '';
+            if($num_of_rows > 0) {
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                while($row = $stmt->fetch()) {
+                    $state_change_history =  $state_change_history.$row['state_update_date'].': '.getMemberStateString($row['state']).'<br>';
+                    if($exit_loop_flag == false) {
+                        if($row['state'] < 3) {
+                            if(is_null($member_last_normal_date)) {
+                                $member_last_date = date_create($date_end);
+                            } else {
+                                $member_last_date = date_create($member_last_normal_date);
+                            }
+                            $normal_state_date = date_create($row['state_update_date']);
+                            $member_continue_diff = $member_continue_diff + (int)date_diff($normal_state_date, $member_last_date)->format("%a");
+                        } else if($row['state'] == 3){
+                            $exit_loop_flag = true;
+                        }
+                    }
+                    $member_last_normal_date = $row['state_update_date'];
+                }
+            }
+
+            $ret =  $ret.'<td>'.floor($member_continue_diff/365).'년 '.($member_continue_diff%365).'일</td>';
+            $ret =  $ret.'<td>'.$state_change_history.'</td>';
+
+            $ret = $ret.'</tr>';
+
+            //reset for next member data
+            $member_last_normal_date = null;
+            $member_continue_diff = 0;
+            $exit_loop_flag = false;
+        }
+
+        return $ret;
+    }
+
 ?>
