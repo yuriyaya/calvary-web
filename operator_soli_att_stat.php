@@ -28,7 +28,7 @@
                 if(isset($_SESSION['u_id'])) {
             
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
-                        include_once "./inc/operator_menu_member.php";
+                        include_once "./inc/operator_menu.php";
                         
                         if(isset($_POST['soli_att_submit'])) {
                             $date_start = $_POST['att_date_start'];

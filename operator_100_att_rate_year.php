@@ -57,8 +57,8 @@
                     $status_msg_code = '';
                 }
             ?>
-            <div class="add_attendence_log_month">
-                <form class="add_attendence_log_month_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <div class="add_attendence_log_year">
+                <form class="add_attendence_log_year_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
                             <td>파트 : </td><td><select class="w3-select w3-border" id="part" name="part_num">
@@ -73,19 +73,19 @@
                                 </select></td>
                         </tr>
                         <tr>
-                            <td>출석월 : </td><td><input type="date" name="att_date" value="<?php if(empty($date)){echo date("Y-m").'-01';} else {echo $date;} ?>"></td>
+                            <td>조회기준일 : </td><td><input type="date" name="att_date" value="<?php if(empty($date)){echo date("Y-m-d");} else {echo $date;} ?>"></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>
-                                <button type="submit" name="att_log_submit" class="w3-button w3-green">월간 조회</button>
+                                <button type="submit" name="att_log_submit" class="w3-button w3-green">조회</button>
                             </td>
                         </tr>
                     </table>
                 </form>
                 <?php
                     if($success) {
-                        echo displayAttendenceMonthlyForm($part_number, $date);
+                        echo displayAttendence100Rate($part_number, $date);
                     }
                     $success = false;
                 ?>

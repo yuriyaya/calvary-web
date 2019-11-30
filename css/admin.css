@@ -3,7 +3,7 @@
     padding-top: 20px;
 }
 
-.add_member, .update_member_state, .add_attendence_date_form, .add_attendence_log_form, .add_attendence_log_month_form {
+.add_member, .update_member_state, .add_attendence_date_form, .add_attendence_log_form, .add_attendence_log_month_form, .add_attendence_log_year_form {
     padding-left: 20px;
     padding-top: 20px;
     padding-bottom: 20px;
