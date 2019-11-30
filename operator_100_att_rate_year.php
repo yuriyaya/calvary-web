@@ -57,8 +57,8 @@
                     $status_msg_code = '';
                 }
             ?>
-            <div class="add_attendence_log_month">
-                <form class="add_attendence_log_month_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <div class="add_attendence_log_year">
+                <form class="add_attendence_log_year_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
                             <td>파트 : </td><td><select class="w3-select w3-border" id="part" name="part_num">
