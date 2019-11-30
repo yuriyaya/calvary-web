@@ -27,7 +27,7 @@
                 $success = false;
                 if(isset($_SESSION['u_id'])) {
                     if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
-                        include_once "./inc/operator_menu.php";
+                        include_once "./inc/operator_menu_member.php";
                         include_once "./inc/func_global.php";
                         if(isset($_POST['member_cont_submit'])) {
                             if(isset($_POST['part_num'])) {
