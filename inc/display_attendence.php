@@ -841,6 +841,7 @@
 
         $year_start = date('Y', strtotime($date)).'-01-01'; //first day or year
         $year_end = date('Y', strtotime($date)).'-12-31'; //last day of year
+        $search_month = (int)date('n', strtotime($date)); //month to search attendence log, include this month
         // echo $year_start.'<br>';
         // echo $year_end.'<br>';
 
@@ -878,7 +879,11 @@
                     $att_date = $row['date'];
                     $month = (int)(date('n', strtotime($att_date)));
                     // echo $month.'<br>';
-                    $att_rate_ary[$month-1] = $row['att_month_rate'];
+                    if($month <= $search_month) {
+                        $att_rate_ary[$month-1] = $row['att_month_rate'];
+                    } else {
+                        $att_rate_ary[$month-1] = 0; // do not display not requested month
+                    }
                 }
             }
 
@@ -893,9 +898,13 @@
                 // } else {
                 //     $ret = $ret.'<td>'.$att_rate_ary[$idx_month].'</td>';
                 // }
-                $ret = $ret.'<td'.getBGColorHTML($att_rate_ary[$idx_month]).'>'.$att_rate_ary[$idx_month].'</td>';
+                if($idx_month >= $search_month && $att_rate_ary[$idx_month] == 0) {
+                    $ret = $ret.'<td'.getBGColorHTML($att_rate_ary[$idx_month]).'>'.'-'.'</td>';
+                } else {
+                    $ret = $ret.'<td'.getBGColorHTML($att_rate_ary[$idx_month]).'>'.$att_rate_ary[$idx_month].'</td>';
+                }
             }
-            $avg_att_rate = (int)(array_sum($att_rate_ary)/(int)date('n', strtotime($date.' -1 months')));
+            $avg_att_rate = (int)(array_sum($att_rate_ary)/$search_month);
             $ret =  $ret.'<td'.getBGColorHTML($avg_att_rate).'>'.$avg_att_rate.'%</td>';
             $ret = $ret.'</tr>';
             
