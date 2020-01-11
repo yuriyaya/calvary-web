@@ -27,7 +27,7 @@
                 include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
             
-                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
+                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'accounting')) {
                         include_once "./inc/operator_menu_member.php";
                         
                         if(isset($_POST['search_member_stat_update_submit'])) {

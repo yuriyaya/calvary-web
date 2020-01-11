@@ -17,6 +17,8 @@
                     <option value="tenor">테너</option>
                     <option value="bass">베이스</option>
                     <option value="operator">임역원</option>
+                    <option value="editor">편집부</option>
+                    <option value="accounting">회계</option>
                     <option value="admin">관리자</option>
                 </select>
                 <input class="w3-input w3-border w3-margin-bottom" type="text" id="username" placeholder="아이디를 입력하세요" name="user_id" required>
