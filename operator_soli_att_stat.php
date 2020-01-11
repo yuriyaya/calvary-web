@@ -107,6 +107,7 @@
                             </td>
                         </tr>
                     </table>
+                    조회기간에 해당하는 솔리스트의 출석율을 표시합니다.<br>
                 </form>
             </div>
             <?php if(!empty($search_result_info)){echo $search_result_info;} ?>

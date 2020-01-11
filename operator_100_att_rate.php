@@ -79,7 +79,7 @@
                 <form class="operator_att_100_member_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
-                            <td>조회 일자 : </td><td><input type="date" name="att_100_date" value="<?php if(empty($att_100_date)){echo date("Y-m-d", strtotime("-1 months"));} else {echo $att_100_date;} ?>"></td>
+                            <td>출석월 : </td><td><input type="date" name="att_100_date" value="<?php if(empty($att_100_date)){echo date("Y-m-d", strtotime("-1 months"));} else {echo $att_100_date;} ?>"></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -88,6 +88,7 @@
                             </td>
                         </tr>
                     </table>
+                    출석월의 개근대원을 파트별로 출력합니다.(일은 무시)<br>
                 </form>
                 <?php if(!empty($result_html)){echo $result_html;} ?>
             </div>

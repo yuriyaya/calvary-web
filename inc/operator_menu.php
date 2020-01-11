@@ -6,5 +6,5 @@
     <a href="operator_soli_att_stat.php" class="w3-bar-item w3-button w3-mobile">솔리스트 출석률</a>
     <a href="operator_100_att_rate.php" class="w3-bar-item w3-button w3-mobile">개근 대원</a>
     <a href="operator_report_stat.php" class="w3-bar-item w3-button w3-mobile">월말보고서 출석통계</a>
-    <a href="operator_100_att_rate_year.php" class="w3-bar-item w3-button w3-mobile">결석일 조회</a>
+    <a href="operator_100_att_rate_year.php" class="w3-bar-item w3-button w3-mobile">결석일수 조회</a>
 </div>

@@ -46,7 +46,7 @@
                 <form class="operator_report_stat_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
                         <tr>
-                            <td>조회 일자 : </td><td><input type="date" name="report_att_stat_date" value="<?php if(empty($att_stat_date)){echo date("Y-m-d", strtotime("-1 months"));} else {echo $att_stat_date;} ?>"></td>
+                            <td>출석월 : </td><td><input type="date" name="report_att_stat_date" value="<?php if(empty($att_stat_date)){echo date("Y-m-d", strtotime("-1 months"));} else {echo $att_stat_date;} ?>"></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -55,6 +55,7 @@
                             </td>
                         </tr>
                     </table>
+                    출석월의 월말보고서 출석통계를 출력합니다. (출석월의 일은 무시됨)<br>
                 </form>
                 <?php if(!empty($str_html)){echo $str_html;} ?>
             </div>

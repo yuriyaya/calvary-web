@@ -33,7 +33,7 @@
         $att_day_cnt = getAttLogDateMonthlyCountNumber($stat_date_end);
         // echo $att_day_cnt.'<br>';
 
-        $str_html = '<table class="w3-table-all w3-hoverable" id="monthly_report_stat"><tr><th>파트</th><th>평균 출석율</th></tr>';
+        $str_html = '<table class="w3-table-all w3-hoverable" id="monthly_report_stat"><tr><th style="width:150px">파트</th><th>평균 출석율</th></tr>';
 
         for($part_num=1; $part_num<8; $part_num++) {
             $att_rate = round(($part_sum_count[$part_num-1]/($att_day_cnt*$total_member_count[$part_num-1]))*100);
