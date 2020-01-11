@@ -953,6 +953,28 @@
 
         include 'dbconn.php';
         $query = "SELECT count(att_date) FROM attendence_date WHERE att_date >='".$date_start."' AND att_date <='".$date_end."';";
+        // echo $query.'<br>';
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        while($row = $stmt->fetch()) {
+            $date_count = $row['count(att_date)'];
+        }
+
+        $ret = $date_count;
+
+        return $ret;
+    }
+
+    function getAttLogDateMonthlyCountNumber($date) {
+        $ret = 0;
+
+        $date_start = date('Y-m', strtotime($date)).'-01';
+        $date_end = date('Y-m-d', strtotime($date));
+
+        include 'dbconn.php';
+        $query = "SELECT count(att_date) FROM attendence_date WHERE att_date >='".$date_start."' AND att_date <='".$date_end."';";
+        // echo $query.'<br>';
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
