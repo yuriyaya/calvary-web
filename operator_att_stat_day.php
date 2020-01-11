@@ -88,6 +88,7 @@
                             </td>
                         </tr>
                     </table>
+                    조회일자에 해당하는 파트별 출석인원을 출력합니다.<br>
                 </form>
                 <?php if(!empty($result_html)){echo $result_html;} ?>
             </div>

@@ -26,7 +26,7 @@
             <?php
                 $success = false;
                 if(isset($_SESSION['u_id'])) {
-                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
+                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'accounting')) {
                         include_once "./inc/operator_menu.php";
                         include_once "./inc/func_global.php";
                         if(isset($_POST['att_log_submit'])) {
@@ -82,6 +82,7 @@
                             </td>
                         </tr>
                     </table>
+                    1월 1일 부터 조회기준일까지의 결석일수를 표시합니다<br>
                 </form>
                 <?php
                     if($success) {

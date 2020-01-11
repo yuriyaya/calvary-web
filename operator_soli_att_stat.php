@@ -27,7 +27,7 @@
                 include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
             
-                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin')) {
+                    if(($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'accounting')) {
                         include_once "./inc/operator_menu.php";
                         
                         if(isset($_POST['soli_att_submit'])) {
@@ -107,6 +107,7 @@
                             </td>
                         </tr>
                     </table>
+                    조회기간에 해당하는 솔리스트의 출석율을 표시합니다.<br>
                 </form>
             </div>
             <?php if(!empty($search_result_info)){echo $search_result_info;} ?>
