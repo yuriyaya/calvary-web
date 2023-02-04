@@ -108,12 +108,13 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
-        $att_list_newbie = $att_list_ary[2];
-        $att_list_temp = $att_list_ary[3];
-        $att_list_special = $att_list_ary[4];
-        $att_list_pause = $att_list_ary[5];
-        $stat_normal = count($att_list_staff) + count($att_list_normal);
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
+        $att_list_newbie = $att_list_ary[3];
+        $att_list_temp = $att_list_ary[4];
+        $att_list_special = $att_list_ary[5];
+        $att_list_pause = $att_list_ary[6];
+        $stat_normal = count($att_list_staff) + count($att_list_substaff) + count($att_list_normal);
         $stat_newbie = count($att_list_newbie);
         $stat_others = count($att_list_temp) + count($att_list_special) + count($att_list_pause);
 
@@ -125,6 +126,10 @@
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:500px;">'.dispalyAttLogHeader($date);
 
         $temp_ary = getAttOneRowBind($part, $date, $att_list_staff, '파트장');
+        $stat_att_normal = $stat_att_normal + $temp_ary[0];
+        $att_check_form=$att_check_form.$temp_ary[1];
+
+        $temp_ary = getAttOneRowBind($part, $date, $att_list_substaff, '부파트장');
         $stat_att_normal = $stat_att_normal + $temp_ary[0];
         $att_check_form=$att_check_form.$temp_ary[1];
 
