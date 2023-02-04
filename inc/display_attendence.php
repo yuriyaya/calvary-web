@@ -287,7 +287,7 @@
         // can't use 'last_state' of member_info directly, because, attendence log need to display member state of requested date.
         // if member state has changed on 10/14 from normal to pause
         // attendence log before 10/14 shall display as normal, but after 10/14 shall display as pause state
-        $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.id ASC, mi.name ASC, ms.state_update_date DESC;";
+        $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.name ASC, mi.id ASC, ms.state_update_date DESC;";
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
