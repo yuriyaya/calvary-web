@@ -271,6 +271,7 @@
         $ret_ary = array();
 
         $member_grp_staff = array();
+        $member_grp_substaff = array();
         $member_grp_normal = array();
         $member_grp_newbie = array();
         $member_grp_temp = array();
@@ -296,6 +297,8 @@
                 $member_data = array($row['id'], $row['name'], $row['state']);
                 if($row['calvary_staff'] == 2) { //calvary staff 파트장
                     array_push($member_grp_staff, $member_data);
+                } else if($row['calvary_staff'] == 3) { //calvary staff 부파트장
+                    array_push($member_grp_substaff, $member_data);
                 } else if(($row['calvary_staff'] < 2) && ($row['state'] <= 2)) { //정대원
                     array_push($member_grp_normal, $member_data);
                 } else if(($row['calvary_staff'] < 2) && ($row['state'] == 3)) { //신입
@@ -316,6 +319,8 @@
         }
         // echo '<br>파트장----------------<br>';
         // echo json_encode($member_grp_staff, JSON_UNESCAPED_UNICODE);
+        // echo '<br>부파트장----------------<br>';
+        // echo json_encode($member_grp_substaff, JSON_UNESCAPED_UNICODE);
         // echo '<br>정대원+솔리스트----------------<br>';
         // echo json_encode($member_grp_normal, JSON_UNESCAPED_UNICODE);
         // echo '<br>신입----------------<br>';
@@ -329,6 +334,7 @@
         // echo '<br>----------------<br>';
 
         array_push($ret_ary, $member_grp_staff);
+        array_push($ret_ary, $member_grp_substaff);
         array_push($ret_ary, $member_grp_normal);
         array_push($ret_ary, $member_grp_newbie);
         array_push($ret_ary, $member_grp_temp);
