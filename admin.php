@@ -25,7 +25,7 @@
             <?php
                 include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
-                    if($_SESSION['u_id'] == 'admin') {
+                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'master')) {
                         include_once "./inc/admin_menu.php";
                     } else {
                         $status_msg_code = '5001';

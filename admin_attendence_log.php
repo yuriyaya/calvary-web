@@ -51,7 +51,7 @@
             <?php
                 $success = false;
                 if(isset($_SESSION['u_id'])) {
-                    if($_SESSION['u_id'] == 'admin') {
+                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'master')) {
                         include_once "./inc/admin_menu.php";
                         include_once "./inc/func_global.php";
                         if(isset($_POST['att_log_submit'])) {

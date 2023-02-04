@@ -25,7 +25,7 @@
 
             <?php
                 if(isset($_SESSION['u_id'])) {
-                    if($_SESSION['u_id'] == 'admin') {
+                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'master')) {
                         include_once "./inc/admin_menu.php";
                         include_once "./inc/func_global.php";
                         include_once "./inc/add_member.php";

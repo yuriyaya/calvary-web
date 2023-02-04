@@ -24,7 +24,7 @@
             <?php
                 include_once "./inc/func_global.php";
                 if(isset($_SESSION['u_id'])) {
-                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'operator')) {
+                    if(($_SESSION['u_id'] == 'admin') || ($_SESSION['u_id'] == 'operator') || ($_SESSION['u_id'] == 'master')) {
                         $status_msg_code = '5002';
                         
                     } else {
