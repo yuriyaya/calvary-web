@@ -284,25 +284,27 @@
         $id_prev = 0;
 
         include 'dbconn.php';
-        // $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.name ASC, ms.state_update_date DESC;";
-        $query = "SELECT * FROM member_info WHERE id>".$part_min." AND id<".$part_max.";";
+        // can't use 'last_state' of member_info directly, because, attendence log need to display member state of requested date.
+        // if member state has changed on 10/14 from normal to pause
+        // attendence log before 10/14 shall display as normal, but after 10/14 shall display as pause state
+        $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.id ASC, mi.name ASC, ms.state_update_date DESC;";
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         while($row = $stmt->fetch()) {
             if($row['id'] != $id_prev) {
-                $member_data = array($row['id'], $row['name'], $row['last_state']);
+                $member_data = array($row['id'], $row['name'], $row['state']);
                 if($row['calvary_staff'] == 2) { //calvary staff 파트장
                     array_push($member_grp_staff, $member_data);
-                } else if(($row['calvary_staff'] < 2) && ($row['last_state'] <= 2)) { //정대원
+                } else if(($row['calvary_staff'] < 2) && ($row['state'] <= 2)) { //정대원
                     array_push($member_grp_normal, $member_data);
-                } else if(($row['calvary_staff'] < 2) && ($row['last_state'] == 3)) { //신입
+                } else if(($row['calvary_staff'] < 2) && ($row['state'] == 3)) { //신입
                     array_push($member_grp_newbie, $member_data);
-                } else if(($row['calvary_staff'] < 2) && ($row['last_state'] == 4)) { //임시
+                } else if(($row['calvary_staff'] < 2) && ($row['state'] == 4)) { //임시
                     array_push($member_grp_temp, $member_data);
-                } else if(($row['calvary_staff'] < 2) && ($row['last_state'] == 5)) { //특별
+                } else if(($row['calvary_staff'] < 2) && ($row['state'] == 5)) { //특별
                     array_push($member_grp_special, $member_data);
-                } else if(($row['calvary_staff'] < 2) && ($row['last_state'] == 6)) { //휴식
+                } else if(($row['calvary_staff'] < 2) && ($row['state'] == 6)) { //휴식
                     array_push($member_grp_pause, $member_data);
                 } else {
                     //do not display in attendence form
