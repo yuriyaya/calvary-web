@@ -17,6 +17,8 @@
             case 'admin':
                 // header("Location: ./attendence_log_part.php?part_num=1&id=0");
                 break;
+            case 'master':
+                break;
             default:
                 $status_msg_code = '5002';
                 break;

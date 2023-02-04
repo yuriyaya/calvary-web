@@ -16,6 +16,8 @@
         switch($id) {
             case 'admin':
                 break;
+            case 'master':
+                break;
             default:
                 $status_msg_code = '5002';
                 break;
