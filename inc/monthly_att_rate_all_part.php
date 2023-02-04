@@ -15,14 +15,17 @@
 
             $att_list_ary = getMemberSNStateFromDB($part_num, $stat_date_end);
             $att_list_staff = $att_list_ary[0];
-            $att_list_normal = $att_list_ary[1];
-            $att_list_newbie = $att_list_ary[2];
+            $att_list_substaff = $att_list_ary[1];
+            $att_list_normal = $att_list_ary[2];
+            $att_list_newbie = $att_list_ary[3];
 
             $total_member_count[$part_num-1] += count($att_list_staff);
+            $total_member_count[$part_num-1] += count($att_list_substaff);
             $total_member_count[$part_num-1] += count($att_list_normal);
             $total_member_count[$part_num-1] += count($att_list_newbie);
 
             $part_sum_count[$part_num-1] = getMemberAttSum($att_list_staff, $part_sum_count[$part_num-1], $stat_date_start, $stat_date_end);
+            $part_sum_count[$part_num-1] = getMemberAttSum($att_list_substaff, $part_sum_count[$part_num-1], $stat_date_start, $stat_date_end);
             $part_sum_count[$part_num-1] = getMemberAttSum($att_list_normal, $part_sum_count[$part_num-1], $stat_date_start, $stat_date_end);
             $part_sum_count[$part_num-1] = getMemberAttSum($att_list_newbie, $part_sum_count[$part_num-1], $stat_date_start, $stat_date_end);
 

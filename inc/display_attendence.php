@@ -388,11 +388,12 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $last_date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
-        $att_list_newbie = $att_list_ary[2];
-        $att_list_temp = $att_list_ary[3];
-        $att_list_special = $att_list_ary[4];
-        $att_list_pause = $att_list_ary[5];
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
+        $att_list_newbie = $att_list_ary[3];
+        $att_list_temp = $att_list_ary[4];
+        $att_list_special = $att_list_ary[5];
+        $att_list_pause = $att_list_ary[6];
 
         $date_list_ary = getAttLogDateArray($date);
 
@@ -400,6 +401,7 @@
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px">'.dispalyAttLogMonthlyHeader($date, $date_list_ary);
 
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_staff, $date_list_ary, '파트장');
+        $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_substaff, $date_list_ary, '부파트장');
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_normal, $date_list_ary);
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_newbie, $date_list_ary);
         $att_check_form=$att_check_form.getAttMonthlyOneRowBind($part, $date, $att_list_temp, $date_list_ary);
@@ -622,16 +624,18 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
-        $att_list_newbie = $att_list_ary[2];
-        $att_list_temp = $att_list_ary[3];
-        $att_list_special = $att_list_ary[4];
-        $att_list_pause = $att_list_ary[5];
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
+        $att_list_newbie = $att_list_ary[3];
+        $att_list_temp = $att_list_ary[4];
+        $att_list_special = $att_list_ary[5];
+        $att_list_pause = $att_list_ary[6];
 
         //display attendence check form
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:500px">'.displayAttStatChangeFormHeader($date);
         
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_substaff, '부파트장');
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_normal);
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_newbie);
         $att_check_form=$att_check_form.getAttStatChangeOneRowBind($part, $date, $att_list_temp);
@@ -807,16 +811,18 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $last_date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
-        $att_list_newbie = $att_list_ary[2];
-        $att_list_temp = $att_list_ary[3];
-        $att_list_special = $att_list_ary[4];
-        $att_list_pause = $att_list_ary[5];
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
+        $att_list_newbie = $att_list_ary[3];
+        $att_list_temp = $att_list_ary[4];
+        $att_list_special = $att_list_ary[5];
+        $att_list_pause = $att_list_ary[6];
 
         //display attendence check form
         $att_year_form='<table class="w3-table-all w3-hoverable" id="att_table">'.dispalyAttLogYearHeader();
 
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_substaff, '부파트장');
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_normal);
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_newbie);
         $att_year_form=$att_year_form.getAttYearOneRowBind($part, $date, $att_list_temp);
@@ -935,11 +941,12 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $last_date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
-        $att_list_newbie = $att_list_ary[2];
-        $att_list_temp = $att_list_ary[3];
-        $att_list_special = $att_list_ary[4];
-        $att_list_pause = $att_list_ary[5];
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
+        $att_list_newbie = $att_list_ary[3];
+        $att_list_temp = $att_list_ary[4];
+        $att_list_special = $att_list_ary[5];
+        $att_list_pause = $att_list_ary[6];
 
         $date_total_count = (int)getAttLogDateCountNumber($date);
         // echo $date_total_count.'<br>';
@@ -948,6 +955,7 @@
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px"><tr><th>이름</th><th>상태</th><th>결석일</th></tr>';
 
         $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_staff, $date_total_count, '파트장');
+        $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_substaff, $date_total_count, '부파트장');
         $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_normal, $date_total_count);
         $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_newbie, $date_total_count);
         $att_check_form=$att_check_form.getAtt100RateOneRowBind($part, $date, $att_list_temp, $date_total_count);
@@ -1074,12 +1082,14 @@
 
         $att_list_ary = getMemberSNStateFromDB($part, $last_date);
         $att_list_staff = $att_list_ary[0];
-        $att_list_normal = $att_list_ary[1];
+        $att_list_substaff = $att_list_ary[1];
+        $att_list_normal = $att_list_ary[2];
 
         //display attendence check form
         $att_check_form='<table class="w3-table-all w3-hoverable" id="att_table" style="width:700px"><tr><th>이름</th><th>상태</th><th>근속일</th><th>이력</th></tr>';
 
         $att_check_form=$att_check_form.getMemberContinueYearOneRowBind($part, $date, $att_list_staff, '파트장');
+        $att_check_form=$att_check_form.getMemberContinueYearOneRowBind($part, $date, $att_list_substaff, '부파트장');
         $att_check_form=$att_check_form.getMemberContinueYearOneRowBind($part, $date, $att_list_normal);
 
         $att_check_form=$att_check_form.'</table>';

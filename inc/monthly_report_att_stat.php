@@ -48,15 +48,16 @@
 
             $att_list_ary = getMemberSNStateFromDB($part_num, $stat_date_end);
             $att_list_staff = $att_list_ary[0];
-            $att_list_normal = $att_list_ary[1];
-            $att_list_newbie = $att_list_ary[2];
-            $att_list_temp = $att_list_ary[3];
-            $att_list_special = $att_list_ary[4];
-            $att_list_pause = $att_list_ary[5];
+            $att_list_substaff = $att_list_ary[1];
+            $att_list_normal = $att_list_ary[2];
+            $att_list_newbie = $att_list_ary[3];
+            $att_list_temp = $att_list_ary[4];
+            $att_list_special = $att_list_ary[5];
+            $att_list_pause = $att_list_ary[6];
 
             if($part_num <= 3) {
                 //sop
-                $total_member_count[0] = $total_member_count[0] + count($att_list_staff);
+                $total_member_count[0] = $total_member_count[0] + count($att_list_staff) + count($att_list_substaff);
                 $total_member_count[0] = $total_member_count[0] + count($att_list_normal);
                 $total_newbie_count = $total_newbie_count + count($att_list_newbie);
                 $sop_newbie_sum = getNewbieAttStatForMonthlyReport($att_list_newbie, $sop_newbie_sum, $stat_date_start, $stat_date_end);
@@ -65,7 +66,7 @@
                 $sop_others_sum = getNewbieAttStatForMonthlyReport($att_list_pause, $sop_others_sum, $stat_date_start, $stat_date_end);
             } else if ($part_num >= 4 && $part_num <= 5) {
                 //alto
-                $total_member_count[1] = $total_member_count[1] + count($att_list_staff);
+                $total_member_count[1] = $total_member_count[1] + count($att_list_staff) + count($att_list_substaff);
                 $total_member_count[1] = $total_member_count[1] + count($att_list_normal);
                 $total_newbie_count = $total_newbie_count + count($att_list_newbie);
                 $alto_newbie_sum = getNewbieAttStatForMonthlyReport($att_list_newbie, $alto_newbie_sum, $stat_date_start, $stat_date_end);
@@ -74,7 +75,7 @@
                 $alto_others_sum = getNewbieAttStatForMonthlyReport($att_list_pause, $alto_others_sum, $stat_date_start, $stat_date_end);
             } else if ($part_num == 6) {
                 //tenor
-                $total_member_count[2] = $total_member_count[2] + count($att_list_staff);
+                $total_member_count[2] = $total_member_count[2] + count($att_list_staff) + count($att_list_substaff);
                 $total_member_count[2] = $total_member_count[2] + count($att_list_normal);
                 $total_newbie_count = $total_newbie_count + count($att_list_newbie);
                 $tenor_newbie_sum = getNewbieAttStatForMonthlyReport($att_list_newbie, $tenor_newbie_sum, $stat_date_start, $stat_date_end);
@@ -83,7 +84,7 @@
                 $tenor_others_sum = getNewbieAttStatForMonthlyReport($att_list_pause, $tenor_others_sum, $stat_date_start, $stat_date_end);
             } else if ($part_num == 7) {
                 //bass
-                $total_member_count[3] = $total_member_count[3] + count($att_list_staff);
+                $total_member_count[3] = $total_member_count[3] + count($att_list_staff) + count($att_list_substaff);
                 $total_member_count[3] = $total_member_count[3] + count($att_list_normal);
                 $total_newbie_count = $total_newbie_count + count($att_list_newbie);
                 $bass_newbie_sum = getNewbieAttStatForMonthlyReport($att_list_newbie, $bass_newbie_sum, $stat_date_start, $stat_date_end);
