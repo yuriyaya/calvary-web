@@ -285,7 +285,7 @@
 
         include 'dbconn.php';
         // $query = "SELECT * FROM member_info AS mi RIGHT JOIN member_state AS ms ON mi.id=ms.id WHERE ms.state_update_date<='".$date."' AND mi.id>".$part_min." AND mi.id<".$part_max." ORDER BY mi.name ASC, ms.state_update_date DESC;";
-        $query = "SELECT * FROM member_info;";
+        $query = "SELECT * FROM member_info WHERE id>".$part_min." AND id<".$part_max.";";
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
