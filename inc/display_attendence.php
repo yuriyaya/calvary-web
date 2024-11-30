@@ -1107,7 +1107,6 @@
 
         $member_last_normal_date = null;
         $member_continue_diff = 0;
-        $exit_loop_flag = false;
 
         for($idx=0; $idx<count($mem_list); $idx++) {
 
@@ -1133,18 +1132,14 @@
                 $stmt->setFetchMode(PDO::FETCH_ASSOC);
                 while($row = $stmt->fetch()) {
                     $state_change_history =  $state_change_history.$row['state_update_date'].': '.getMemberStateString($row['state']).'<br>';
-                    if($exit_loop_flag == false) {
-                        if($row['state'] < 3) {
-                            if(is_null($member_last_normal_date)) {
-                                $member_last_date = date_create($date_end);
-                            } else {
-                                $member_last_date = date_create($member_last_normal_date);
-                            }
-                            $normal_state_date = date_create($row['state_update_date']);
-                            $member_continue_diff = $member_continue_diff + (int)date_diff($normal_state_date, $member_last_date)->format("%a");
-                        } else if($row['state'] == 3){
-                            $exit_loop_flag = true;
+                    if($row['state'] < 3) {
+                        if(is_null($member_last_normal_date)) {
+                            $member_last_date = date_create($date_end);
+                        } else {
+                            $member_last_date = date_create($member_last_normal_date);
                         }
+                        $normal_state_date = date_create($row['state_update_date']);
+                        $member_continue_diff = $member_continue_diff + (int)date_diff($normal_state_date, $member_last_date)->format("%a");
                     }
                     $member_last_normal_date = $row['state_update_date'];
                 }
@@ -1158,7 +1153,6 @@
             //reset for next member data
             $member_last_normal_date = null;
             $member_continue_diff = 0;
-            $exit_loop_flag = false;
         }
 
         return $ret;
