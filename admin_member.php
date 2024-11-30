@@ -38,6 +38,7 @@
                 }
             ?>
             <?php if(!empty($additional_info)){echo $additional_info;} ?>
+            <a href="https://likesnoopy.info/calvary2" target="_blank">새로운 대원관리 페이지 사용하기</a>
             <div class="add_member">
                 <form class="add_member_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                     <table style="border:0px;">
